@@ -1,7 +1,7 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { FaPlay, FaStop } from "react-icons/fa";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -96,6 +96,20 @@ const AudioPlayer = () => {
         setDuration(audioRef.current.duration);
       };
     }
+    const audio = audioRef.current;
+  
+    if (audio) {
+      const handlePlay = () => setIsPlaying(true);
+      const handlePause = () => setIsPlaying(false);
+  
+      audio.addEventListener("play", handlePlay);
+      audio.addEventListener("pause", handlePause);
+  
+      return () => {
+        audio.removeEventListener("play", handlePlay);
+        audio.removeEventListener("pause", handlePause);
+      };
+    }
   }, [audioFile]);
 
   return (
@@ -122,13 +136,12 @@ const AudioPlayer = () => {
 
           {/* Time Input Field */}
           <div className="flex w-full mb-2">
-            <label htmlFor='time' className="text-sm font-medium mr-2">Time:</label>
             <input
               type="text"
               name='time'
               value={formatTime(currentTime)}
               onChange={handleTimeInputChange}
-              className="w-24 px-2 py-1 border rounded-lg text-center"
+              className="w-24 px-2 py-1 border border-slate-500 rounded-lg text-center"
             />
           </div>
 
@@ -161,7 +174,7 @@ const AudioPlayer = () => {
                 max="3"
                 value={playbackRate}
                 onChange={handleSpeedChange}
-                className="w-16 px-2 py-1 border rounded-lg text-center"
+                className="w-16 px-2 py-1 border border-slate-500 rounded-lg text-center"
               />
             </div>
 
@@ -193,7 +206,7 @@ const AudioPlayer = () => {
                 onClick={togglePlay}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
               >
-                {isPlaying ? <FaStop /> : <FaPlay />}
+                {isPlaying ? <FaPause /> : <FaPlay />}
               </button>
               <button
                 type="button"
