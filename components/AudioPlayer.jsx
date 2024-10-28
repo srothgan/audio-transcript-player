@@ -2,7 +2,6 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { FaPlay, FaStop } from "react-icons/fa";
-import { MdOutlineForward10, MdOutlineReplay10 } from "react-icons/md";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -100,7 +99,7 @@ const AudioPlayer = () => {
   }, [audioFile]);
 
   return (
-    <div className="flex flex-col items-center max-w-lg mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
+    <div className="flex flex-col items-center max-w-3xl mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
       <div className="mb-4 w-full">
         <label htmlFor='audio' className="font-semibold">Upload Audio File:</label>
         <input
@@ -173,7 +172,21 @@ const AudioPlayer = () => {
                 onClick={() => skipTime(-10)}
                 className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
               >
-                <MdOutlineReplay10 size={25} />
+                -10s
+              </button>
+              <button
+                type="button"
+                onClick={() => skipTime(-5)}
+                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+              >
+                -5s
+              </button>
+              <button
+                type="button"
+                onClick={() => skipTime(-1)}
+                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+              >
+                -1s
               </button>
               <button
                 type="button"
@@ -184,10 +197,24 @@ const AudioPlayer = () => {
               </button>
               <button
                 type="button"
+                onClick={() => skipTime(1)}
+                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+              >
+                +1s
+              </button>
+              <button
+                type="button"
+                onClick={() => skipTime(5)}
+                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+              >
+                +5s
+              </button>
+              <button
+                type="button"
                 onClick={() => skipTime(10)}
                 className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
               >
-                <MdOutlineForward10 size={25} />
+                +10s
               </button>
             </div>
 
