@@ -12,6 +12,11 @@ const AudioPlayer = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [volume, setVolume] = useState(1);
 
+  const [sec, setSec] = useState('00')
+  const [min, setMin] = useState('00')
+  const [hour, setHour] = useState('00')
+  const [activeInput, setActiveInput] = useState(null);
+
   // Play or stop audio
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -35,16 +40,6 @@ const AudioPlayer = () => {
   const skipTime = (amount) => {
     audioRef.current.currentTime += amount;
     setCurrentTime(audioRef.current.currentTime);
-  };
-
-  // Handle time input in hh:mm:ss format
-  const handleTimeInputChange = (event) => {
-    const timeParts = event.target.value.split(":").map(Number);
-    const timeInSeconds = timeParts[0] * 3600 + timeParts[1] * 60 + timeParts[2];
-    if (!Number.isNaN(timeInSeconds)) {
-      audioRef.current.currentTime = timeInSeconds;
-      setCurrentTime(timeInSeconds);
-    }
   };
 
   // Update progress from the range input
@@ -91,11 +86,10 @@ const AudioPlayer = () => {
   // Update duration on audio file load
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.onloadedmetadata = () => {
-        setDuration(audioRef.current.duration);
-      };
-    }
+      if (audioRef.current) {
+        audioRef.current.onloadedmetadata = () => setDuration(audioRef.current.duration);
+        audioRef.current.ontimeupdate = () => setCurrentTime(audioRef.current.currentTime);
+      }
     const audio = audioRef.current;
   
     if (audio) {
@@ -111,6 +105,55 @@ const AudioPlayer = () => {
       };
     }
   }, [audioFile]);
+
+  const formatTimeUnit = (unit) => unit.toString().padStart(2, "0");
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+
+    if(activeInput!=="hour"){
+      const hours = Math.floor(currentTime / 3600);
+      setHour(formatTimeUnit(hours));
+    }
+    if(activeInput!=="minute"){
+      const minutes = Math.floor((currentTime % 3600) / 60);
+      setMin(formatTimeUnit(minutes));
+    }
+    if(activeInput!=="second"){
+    const seconds = Math.floor(currentTime % 60);
+    setSec(formatTimeUnit(seconds));
+    }
+    
+    
+  }, [currentTime, activeInput]);
+
+  const handleHourChange = (event) => {
+    const newHour = Number.parseInt(event.target.value, 10) || 0;
+    const newTime = newHour * 3600 + Number.parseInt(min, 10) * 60 + Number.parseInt(sec, 10);
+    setHour(formatTimeUnit(newHour));
+    setCurrentTime(newTime);
+    audioRef.current.currentTime = newTime;
+  };
+
+  // Update currentTime based on manual minute input
+  const handleMinuteChange = (event) => {
+    const newMinute = Number.parseInt(event.target.value, 10) || 0;
+    const newTime = Number.parseInt(hour, 10) * 3600 + newMinute * 60 + Number.parseInt(sec, 10);
+    setMin(formatTimeUnit(newMinute));
+    setCurrentTime(newTime);
+    audioRef.current.currentTime = newTime;
+  };
+
+  // Update currentTime based on manual second input
+  const handleSecondChange = (event) => {
+    const newSecond = Number.parseInt(event.target.value, 10) || 0;
+    const newTime = Number.parseInt(hour, 10) * 3600 + Number.parseInt(min, 10) * 60 + newSecond;
+    setSec(formatTimeUnit(newSecond));
+    setCurrentTime(newTime);
+    audioRef.current.currentTime = newTime;
+  };
+
+
 
   return (
     <div className="flex flex-col items-center max-w-3xl mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
@@ -136,13 +179,40 @@ const AudioPlayer = () => {
 
           {/* Time Input Field */}
           <div className="flex w-full mb-2">
-            <input
-              type="text"
-              name='time'
-              value={formatTime(currentTime)}
-              onChange={handleTimeInputChange}
-              className="w-24 px-2 py-1 border border-slate-500 rounded-lg text-center"
-            />
+            <div className="flex items-center space-x-1 bg-white border border-slate-500 rounded-lg px-2 py-1">
+              <input
+                type="text"
+                name="hour"
+                value={hour}
+                onChange={handleHourChange}
+                onFocus={() => setActiveInput("hour")}
+                onBlur={() =>setActiveInput(null)}
+                className="w-10 px-2 text-center focus:outline-none"
+                placeholder="HH"
+              />
+              <span>:</span>
+              <input
+                type="text"
+                name="min"
+                value={min}
+                onChange={handleMinuteChange}
+                onFocus={() => setActiveInput("minute")}
+                onBlur={() =>setActiveInput(null)}
+                className="w-10 px-2 text-center focus:outline-none"
+                placeholder="MM"
+              />
+              <span>:</span>
+              <input
+                type="text"
+                name="sec"
+                value={sec}
+                onChange={handleSecondChange}
+                onFocus={() => setActiveInput("second")}
+                onBlur={() =>setActiveInput(null)}
+                className="w-10 px-2 text-center focus:outline-none"
+                placeholder="SS"
+              />
+            </div>
           </div>
 
           {/* Progress bar */}
@@ -152,7 +222,7 @@ const AudioPlayer = () => {
               min="0"
               max={duration}
               value={currentTime}
-              onChange={handleProgressChange}
+              onChange={() =>handleProgressChange}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
