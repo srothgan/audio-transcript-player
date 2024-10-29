@@ -1,7 +1,7 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { FaPlay, FaPause, FaTrashAlt, FaCopy   } from "react-icons/fa";
+import { FaPlay, FaPause, FaTrashAlt, FaCopy, FaMinus, FaPlus   } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -182,7 +182,7 @@ const AudioPlayer = () => {
             <button
               type="button"
               onClick={handleDeleteAudio}
-              className="p-2 text-red-500 hover:text-red-700 transition-colors"
+              className="hidden md:flex p-2 text-red-500 hover:text-red-700 transition-colors"
               aria-label="Delete Audio"
             >
               <FaTrashAlt size={18} />
@@ -243,6 +243,14 @@ const AudioPlayer = () => {
               aria-label="Copy current time to clipboard"
             >
               <FaCopy />
+            </button>
+            <button
+              type="button"
+              onClick={handleDeleteAudio}
+              className="ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition"
+              aria-label="Delete Audio"
+            >
+              <FaTrashAlt />
             </button>
           </div>
 
@@ -348,32 +356,42 @@ const AudioPlayer = () => {
             </div>
 
             {/*mobile volumne and speed */}
-            <div className='w-full md:hidden flex justify-start gap-16 mt-4'>
-              <div className='flex flex-col gap-2'>
-                <label htmlFor='volume' className="text-sm font-medium">Volume:</label>
-                <input
-                  type="range"
-                  name='volume'
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={handleVolumeChange}
-                  className="w-20 h-2 bg-gray-200 rounded-lg cursor-pointer"
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
+            <div className='w-full md:hidden flex justify-start items-center gap-4 mt-4'>
+              <div className='flex items-center gap-2'>
                 <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
-                <input
-                  type="number"
-                  name='speed'
-                  step="0.1"
-                  min="0.1"
-                  max="3"
-                  value={playbackRate}
-                  onChange={handleSpeedChange}
-                  className="w-20 px-2 py-1 border border-slate-500 rounded-lg text-center"
-                />
+                <div className="flex items-center space-x-2">
+                  {/* Minus Button */}
+                  <button
+                    type="button"
+                    onClick={() => setPlaybackRate((prev) => Math.max(0.1, Number.parseFloat((prev - 0.1).toFixed(1))))}
+                    className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                    aria-label="Decrease Speed"
+                  >
+                    <FaMinus/>
+                  </button>
+
+                  {/* Speed Input Field */}
+                  <input
+                    type="number"
+                    name="speed"
+                    step="0.1"
+                    min="0.1"
+                    max="3"
+                    value={playbackRate}
+                    onChange={handleSpeedChange}
+                    className="w-20 px-2 py-1 border border-slate-500 rounded-lg text-center"
+                  />
+
+                  {/* Plus Button */}
+                  <button
+                    type="button"
+                    onClick={() => setPlaybackRate((prev) => Math.min(3, Number.parseFloat((prev + 0.1).toFixed(1))))}
+                    className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                    aria-label="Increase Speed"
+                  >
+                    <FaPlus/>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
