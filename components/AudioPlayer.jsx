@@ -157,7 +157,7 @@ const AudioPlayer = () => {
   }
 
   return (
-    <div className="flex flex-col items-center max-w-3xl mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
+    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
       <div className="flex flex-col mb-4 w-full">
         <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
         <div className="flex items-center gap-4 rounded-lg w-full py-2">
@@ -246,9 +246,9 @@ const AudioPlayer = () => {
           </div>
 
           {/* Controls grid */}
-          <div className="flex justify-between items-center w-full mt-4">
+          <div className="flex flex-col md:flex-row justify-between items-center w-full mt-4">
             {/* Speed Control */}
-            <div className="flex items-center space-x-2 w-40">
+            <div className="hidden md:flex items-center space-x-2 w-40">
               <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
               <input
                 type="number"
@@ -263,11 +263,11 @@ const AudioPlayer = () => {
             </div>
 
             {/* Play, stop, skip buttons */}
-            <div className="flex justify-center space-x-2">
+            <div className="flex w-full md:w-1/2 justify-between">
               <button
                 type="button"
                 onClick={() => skipTime(-10)}
-                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+                className="hidden md:flex px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
               >
                 -10s
               </button>
@@ -309,14 +309,14 @@ const AudioPlayer = () => {
               <button
                 type="button"
                 onClick={() => skipTime(10)}
-                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+                className="hidden md:flex px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
               >
                 +10s
               </button>
             </div>
 
             {/* Volume Control */}
-            <div className="flex items-center space-x-2 justify-end w-40">
+            <div className="hidden md:flex items-center space-x-2 justify-end w-40">
               <label htmlFor='volume' className="text-sm font-medium">Volume:</label>
               <input
                 type="range"
@@ -328,6 +328,36 @@ const AudioPlayer = () => {
                 onChange={handleVolumeChange}
                 className="w-16 h-2 bg-gray-200 rounded-lg cursor-pointer"
               />
+            </div>
+
+            {/*mobile volumne and speed */}
+            <div className='w-full md:hidden flex justify-start gap-16 mt-4'>
+              <div className='flex flex-col gap-2'>
+                <label htmlFor='volume' className="text-sm font-medium">Volume:</label>
+                <input
+                  type="range"
+                  name='volume'
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-20 h-2 bg-gray-200 rounded-lg cursor-pointer"
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
+                <input
+                  type="number"
+                  name='speed'
+                  step="0.1"
+                  min="0.1"
+                  max="3"
+                  value={playbackRate}
+                  onChange={handleSpeedChange}
+                  className="w-20 px-2 py-1 border border-slate-500 rounded-lg text-center"
+                />
+              </div>
             </div>
           </div>
         </>
