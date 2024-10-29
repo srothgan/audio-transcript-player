@@ -43,11 +43,11 @@ const AudioPlayer = () => {
     setCurrentTime(audioRef.current.currentTime);
   };
 
-  // Update progress from the range input
+  // Update progress bar and set audio's current time
   const handleProgressChange = (event) => {
-    const timeInSeconds = Number(event.target.value);
-    audioRef.current.currentTime = timeInSeconds;
-    setCurrentTime(timeInSeconds);
+    const newTime = Number(event.target.value);
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
   };
 
   // Handle volume change
@@ -87,28 +87,10 @@ const AudioPlayer = () => {
   // Update duration on audio file load
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.onloadedmetadata = () => setDuration(audioRef.current.duration);
-      audioRef.current.ontimeupdate = () => {
-        if (audioRef.current) { // Check if audioRef.current is still defined
-          setCurrentTime(audioRef.current.currentTime);
-        }
-      };
-    }
-  
     const audio = audioRef.current;
-  
     if (audio) {
-      const handlePlay = () => setIsPlaying(true);
-      const handlePause = () => setIsPlaying(false);
-  
-      audio.addEventListener("play", handlePlay);
-      audio.addEventListener("pause", handlePause);
-  
-      return () => {
-        audio.removeEventListener("play", handlePlay);
-        audio.removeEventListener("pause", handlePause);
-      };
+      audio.onloadedmetadata = () => setDuration(audio.duration);
+      audio.ontimeupdate = () => setCurrentTime(audio.currentTime);
     }
   }, [audioFile]);
 
@@ -254,7 +236,7 @@ const AudioPlayer = () => {
               min="0"
               max={duration}
               value={currentTime}
-              onChange={() =>handleProgressChange}
+              onChange={handleProgressChange} // Update here
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
