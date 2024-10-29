@@ -163,6 +163,11 @@ const AudioPlayer = () => {
     navigator.clipboard.writeText(formattedTime)
     toast.success("Copied timestamp to Clipboard successfully!");
   };
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = playbackRate;
+    }
+  }, [playbackRate]);
 
   return (
     <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
@@ -247,7 +252,7 @@ const AudioPlayer = () => {
             <button
               type="button"
               onClick={handleDeleteAudio}
-              className="ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition"
+              className="flex md:hidden ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition"
               aria-label="Delete Audio"
             >
               <FaTrashAlt />
@@ -373,13 +378,13 @@ const AudioPlayer = () => {
                   {/* Speed Input Field */}
                   <input
                     type="number"
-                    name="speed"
+                    name='speed'
                     step="0.1"
                     min="0.1"
                     max="3"
                     value={playbackRate}
                     onChange={handleSpeedChange}
-                    className="w-20 px-2 py-1 border border-slate-500 rounded-lg text-center"
+                    className="w-16 px-2 py-1 border border-slate-500 rounded-lg text-center"
                   />
 
                   {/* Plus Button */}
