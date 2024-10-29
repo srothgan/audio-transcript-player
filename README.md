@@ -1,2 +1,2 @@
 # audio-player
-A audio simple, helpful for transcription
+A simple audio player, helpful for transcription
