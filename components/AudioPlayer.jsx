@@ -1,7 +1,10 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { FaPlay, FaPause, FaTrashAlt  } from "react-icons/fa";
+import { FaPlay, FaPause, FaTrashAlt, FaCopy   } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -66,7 +69,7 @@ const AudioPlayer = () => {
       setCurrentTime(0);
       setIsPlaying(false);
     } else {
-      alert("Please upload a valid audio file.");
+      toast.error("Please upload a valid audio file.");
     }
   };
 
@@ -155,16 +158,22 @@ const AudioPlayer = () => {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
     }
   }
+  const copyToClipboard = () => {
+    const formattedTime = `[${hour}:${min}:${sec}]`;
+    navigator.clipboard.writeText(formattedTime)
+    toast.success("Copied timestamp to Clipboard successfully!");
+  };
 
   return (
     <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
+      <ToastContainer autoClose={2000} />
       <div className="flex flex-col mb-4 w-full">
         <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
         <div className="flex items-center gap-4 rounded-lg w-full py-2">
           <input
             type="file"
             name="audio"
-            accept="audio/*"
+            accept="audio/mpeg, audio/mp3, audio/wav, audio/aac, audio/mp4, audio/m4a, audio/ogg, audio/webm, audio/x-aiff, audio/x-wav, audio/flac, audio/opus, audio/3gpp, audio/amr"
             onChange={handleFileUpload}
             ref={fileInputRef}
             className="block w-fit text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
@@ -227,6 +236,14 @@ const AudioPlayer = () => {
                 placeholder="SS"
               />
             </div>
+            <button
+              type="button"
+              onClick={copyToClipboard}
+              className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              aria-label="Copy current time to clipboard"
+            >
+              <FaCopy />
+            </button>
           </div>
 
           {/* Progress bar */}
