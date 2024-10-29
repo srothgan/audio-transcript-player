@@ -1,10 +1,11 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay, FaPause, FaTrashAlt  } from "react-icons/fa";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
+  const fileInputRef = useRef(null); 
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
@@ -85,11 +86,16 @@ const AudioPlayer = () => {
 
   // Update duration on audio file load
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-      if (audioRef.current) {
-        audioRef.current.onloadedmetadata = () => setDuration(audioRef.current.duration);
-        audioRef.current.ontimeupdate = () => setCurrentTime(audioRef.current.currentTime);
-      }
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.onloadedmetadata = () => setDuration(audioRef.current.duration);
+      audioRef.current.ontimeupdate = () => {
+        if (audioRef.current) { // Check if audioRef.current is still defined
+          setCurrentTime(audioRef.current.currentTime);
+        }
+      };
+    }
+  
     const audio = audioRef.current;
   
     if (audio) {
@@ -153,19 +159,45 @@ const AudioPlayer = () => {
     audioRef.current.currentTime = newTime;
   };
 
-
+  const handleDeleteAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause(); // Stop playback if audio is playing
+      audioRef.current.ontimeupdate = null; // Clear the ontimeupdate handler
+    }
+    setAudioFile(null); // Clear the audio file
+    setCurrentTime(0); // Reset time and playback states
+    setDuration(0);
+    setIsPlaying(false);
+  
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Clear the file input to remove the file name
+    }
+  }
 
   return (
     <div className="flex flex-col items-center max-w-3xl mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
-      <div className="mb-4 w-full">
-        <label htmlFor='audio' className="font-semibold">Upload Audio File:</label>
-        <input
-          type="file"
-          name='audio'
-          accept="audio/*"
-          onChange={handleFileUpload}
-          className="mt-2 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-        />
+      <div className="flex flex-col mb-4 w-full">
+        <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
+        <div className="flex items-center gap-4 rounded-lg w-full py-2">
+          <input
+            type="file"
+            name="audio"
+            accept="audio/*"
+            onChange={handleFileUpload}
+            ref={fileInputRef}
+            className="block w-fit text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+          {audioFile && (
+            <button
+              type="button"
+              onClick={handleDeleteAudio}
+              className="p-2 text-red-500 hover:text-red-700 transition-colors"
+              aria-label="Delete Audio"
+            >
+              <FaTrashAlt size={18} />
+            </button>
+          )}
+        </div>
       </div>
 
       {audioFile && (
