@@ -153,6 +153,16 @@ const AudioPlayer = () => {
     setCurrentTime(0); // Reset time and playback states
     setDuration(0);
     setIsPlaying(false);
+    setPlaybackRate(1);
+    setVolume(1);
+    
+    // Reset time input fields
+    setSec('00');
+    setMin('00');
+    setHour('00');
+    
+    // Reset active input field
+    setActiveInput(null);
   
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
@@ -187,7 +197,7 @@ const AudioPlayer = () => {
             <button
               type="button"
               onClick={handleDeleteAudio}
-              className="hidden md:flex p-2 text-red-500 hover:text-red-700 transition-colors"
+              className="hidden md:flex p-2 text-red-500 hover:text-red-700 transition-colors justify-center items-center"
               aria-label="Delete Audio"
             >
               <FaTrashAlt size={18} />
@@ -252,7 +262,7 @@ const AudioPlayer = () => {
             <button
               type="button"
               onClick={handleDeleteAudio}
-              className="flex md:hidden ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition"
+              className="flex md:hidden ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition justify-center items-center"
               aria-label="Delete Audio"
             >
               <FaTrashAlt />
