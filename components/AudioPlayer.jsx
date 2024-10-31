@@ -305,6 +305,9 @@ const AudioPlayer = () => {
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
+            <div className='flex lg:hidden text-xs text-gray-500 mt-1'>
+              <span>*The process bar dragable and input work on mobile, only after the audio has been played at least once.</span>
+            </div>
           </div>
 
           {/* Controls grid */}
