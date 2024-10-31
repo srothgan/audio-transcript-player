@@ -202,7 +202,7 @@ const AudioPlayer = () => {
   }, [playbackRate]);
 
   return (
-    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
+    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md my-8">
       <ToastContainer autoClose={2000} />
       <div className="flex flex-col mb-4 w-full">
         <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
