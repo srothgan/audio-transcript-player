@@ -7,7 +7,7 @@ export default function ActionBar({isPlaying, togglePlay, skipTime}){
             <button
             type="button"
             onClick={() => skipTime(-10)}
-            className="hidden md:flex px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+            className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
             >
             -10s
             </button>
@@ -49,7 +49,7 @@ export default function ActionBar({isPlaying, togglePlay, skipTime}){
             <button
             type="button"
             onClick={() => skipTime(10)}
-            className="hidden md:flex px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+            className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
             >
             +10s
             </button>

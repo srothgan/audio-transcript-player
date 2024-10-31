@@ -233,25 +233,20 @@ const AudioPlayer = () => {
             formatTime={formatTime}
           />
 
-          {/* Controls grid */}
-          <div className="flex flex-col md:flex-row justify-between items-center w-full mt-4">
-            {/* Speed Control */}
-            <div className="hidden md:flex items-center justify-center">
-              <PlaybackSpeed playbackRate={playbackRate} setPlaybackRate={setPlaybackRate}/>
-            </div>
-
-            {/* Play, stop, skip buttons */}
+          {/* Play, stop, skip buttons */}
+          <div className="flex flex-row justify-center items-center w-full mb-4">
             <ActionBar isPlaying={isPlaying} togglePlay={togglePlay} skipTime={skipTime}/>
+          </div>
+
+          {/* Controls grid */}
+          <div className="flex flex-row justify-between items-center w-full">
+            {/* Speed Control */}
+            <PlaybackSpeed playbackRate={playbackRate} setPlaybackRate={setPlaybackRate}/>
 
             {/* Volume Control */}
             <VolumeBar volume={volume} handleVolumeChange={handleVolumeChange}/>
-
-            {/*mobile volumne and speed */}
-            <div className="flex md:hidden items-center justify-center">
-              <PlaybackSpeed playbackRate={playbackRate} setPlaybackRate={setPlaybackRate}/>
-            </div>
           </div>
-          </div>
+        </div>
       )}
     </div>
   );

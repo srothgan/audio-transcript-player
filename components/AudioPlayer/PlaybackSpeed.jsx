@@ -6,7 +6,7 @@ export default function PlaybackSpeed({playbackRate, setPlaybackRate }){
    
     return(
         <div className='w-full flex justify-start items-center gap-2 '>
-            <label htmlFor='speed' className="text-sm font-medium ">Playback <br/>Speed:</label>
+            <label htmlFor='speed' className="text-xs font-medium ">Playback <br/>Speed:</label>
             <div className="flex items-center space-x-2">
                 {/* Minus Button */}
                 <button
