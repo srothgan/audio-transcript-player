@@ -202,9 +202,13 @@ const AudioPlayer = () => {
   }, [playbackRate]);
 
   return (
-    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md my-8">
+    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4  bg-white border border-gray-200 rounded-lg shadow-md my-8">
       <ToastContainer autoClose={2000} />
-      <div className="flex flex-col mb-4 w-full">
+      {/* Header */}
+      <div className='w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white px-2 py-1 rounded-t-lg'>
+        <p className="text-xl font-semibold tracking-wide italic">Audio Player</p>
+      </div>
+      <div className="flex flex-col w-full px-6  py-3">
         <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
         <div className="flex items-center gap-4 rounded-lg w-full py-2">
           <input
@@ -229,7 +233,7 @@ const AudioPlayer = () => {
       </div>
 
       {audioFile && (
-        <>
+        <div className='px-6 pb-6 w-full flex flex-col'>
           {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
           <audio
             ref={audioRef}
@@ -305,8 +309,8 @@ const AudioPlayer = () => {
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-            <div className='flex lg:hidden text-xs text-gray-500 mt-1'>
-              <span>*The process bar dragable and input work on mobile, only after the audio has been played at least once.</span>
+            <div className='flex xl:hidden text-xs text-gray-500 mt-1'>
+              <span>*The progress bar and time input only become functional on mobile devices and iPads after the audio has been played at least once.</span>
             </div>
           </div>
 
@@ -435,7 +439,7 @@ const AudioPlayer = () => {
               </div>
             </div>
           </div>
-        </>
+          </div>
       )}
     </div>
   );
