@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DeleteButton from "./AudioPlayer/DeleteButton";
 import PlaybackSpeed from "./AudioPlayer/PlaybackSpeed";
 import VolumeBar from "./AudioPlayer/VolumeBar";
+import CopyClipboardButton from "./AudioPlayer/CopyClipboardButton";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -163,33 +164,7 @@ const AudioPlayer = () => {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
     }
   }
-  const copyToClipboard = () => {
-    const formattedTime = `[${hour}:${min}:${sec}]`;
   
-    // Use navigator.clipboard if available
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(formattedTime)
-        .then(() => toast.success("Copied timestamp to Clipboard successfully!"))
-        .catch((err) => console.error("Clipboard copy failed:", err));
-    } else {
-      // Fallback for mobile browsers: create a temporary input
-      const tempInput = document.createElement("input");
-      tempInput.value = formattedTime;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      tempInput.setSelectionRange(0, tempInput.value.length); // For iOS compatibility
-  
-      try {
-        document.execCommand("copy");
-        toast.success("Copied timestamp to Clipboard successfully!");
-      } catch (err) {
-        console.error("Fallback copy failed:", err);
-        toast.error("Failed to copy timestamp to Clipboard.");
-      } finally {
-        document.body.removeChild(tempInput);
-      }
-    }
-  };
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.playbackRate = playbackRate;
@@ -267,14 +242,7 @@ const AudioPlayer = () => {
                 placeholder="SS"
               />
             </div>
-            <button
-              type="button"
-              onClick={copyToClipboard}
-              className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-              aria-label="Copy current time to clipboard"
-            >
-              <FaCopy />
-            </button>
+            <CopyClipboardButton hour={hour} min={min} sec={sec} />
             <div className="flex md:hidden">
               <DeleteButton handleDeleteAudio={handleDeleteAudio} />
             </div>
