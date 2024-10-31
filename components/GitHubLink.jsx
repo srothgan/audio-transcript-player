@@ -6,7 +6,7 @@ const GitHubLink = () => {
       href={"https://github.com/srothgan/audio-player"}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed top-4 left-4 md:top-6 md:left-6 z-50"
+      className=" z-50"
       aria-label="GitHub Repository"
     >
       {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
