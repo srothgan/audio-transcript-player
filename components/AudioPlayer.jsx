@@ -8,6 +8,8 @@ import PlaybackSpeed from "./AudioPlayer/PlaybackSpeed";
 import VolumeBar from "./AudioPlayer/VolumeBar";
 import CopyClipboardButton from "./AudioPlayer/CopyClipboardButton";
 import ActionBar from "./AudioPlayer/ActionBar";
+import ProgressBar from "./AudioPlayer/ProgressBar";
+import TimeInput from "./AudioPlayer/TimeInput";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -208,40 +210,15 @@ const AudioPlayer = () => {
 
           {/* Time Input Field */}
           <div className="flex w-full mb-2">
-            <div className="flex items-center space-x-1 bg-white border border-slate-500 rounded-lg px-2 py-1">
-              <input
-                type="text"
-                name="hour"
-                value={hour}
-                onChange={handleHourChange}
-                onFocus={() => setActiveInput("hour")}
-                onBlur={() =>setActiveInput(null)}
-                className="w-10 px-2 text-center focus:outline-none"
-                placeholder="HH"
-              />
-              <span>:</span>
-              <input
-                type="text"
-                name="min"
-                value={min}
-                onChange={handleMinuteChange}
-                onFocus={() => setActiveInput("minute")}
-                onBlur={() =>setActiveInput(null)}
-                className="w-10 px-2 text-center focus:outline-none"
-                placeholder="MM"
-              />
-              <span>:</span>
-              <input
-                type="text"
-                name="sec"
-                value={sec}
-                onChange={handleSecondChange}
-                onFocus={() => setActiveInput("second")}
-                onBlur={() =>setActiveInput(null)}
-                className="w-10 px-2 text-center focus:outline-none"
-                placeholder="SS"
-              />
-            </div>
+            <TimeInput
+              hour={hour}
+              min={min}
+              sec={sec}
+              handleHourChange={handleHourChange}
+              handleMinuteChange={handleMinuteChange}
+              handleSecondChange={handleSecondChange}
+              setActiveInput={setActiveInput}
+            />
             <CopyClipboardButton hour={hour} min={min} sec={sec} />
             <div className="flex md:hidden">
               <DeleteButton handleDeleteAudio={handleDeleteAudio} />
@@ -249,23 +226,12 @@ const AudioPlayer = () => {
           </div>
 
           {/* Progress bar */}
-          <div className="w-full my-4">
-            <input
-              type="range"
-              min="0"
-              max={duration}
-              value={currentTime}
-              onChange={handleProgressChange} // Update here
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
-            </div>
-            <div className='flex xl:hidden text-xs text-gray-500 mt-1'>
-              <span>*The progress bar and time input only become functional on mobile devices and iPads after the audio has been played at least once.</span>
-            </div>
-          </div>
+          <ProgressBar
+            duration={duration}
+            currentTime={currentTime}
+            handleProgressChange={handleProgressChange}
+            formatTime={formatTime}
+          />
 
           {/* Controls grid */}
           <div className="flex flex-col md:flex-row justify-between items-center w-full mt-4">
