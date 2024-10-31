@@ -1,10 +1,12 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { FaPlay, FaPause, FaTrashAlt, FaCopy, FaMinus, FaPlus   } from "react-icons/fa";
+import { FaPlay, FaPause, FaCopy} from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
+import DeleteButton from "./AudioPlayer/DeleteButton";
+import PlaybackSpeed from "./AudioPlayer/PlaybackSpeed";
+import VolumeBar from "./AudioPlayer/VolumeBar";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -31,13 +33,6 @@ const AudioPlayer = () => {
       audio.pause();
       setIsPlaying(false);
     }
-  };
-
-  // Handle speed change
-  const handleSpeedChange = (event) => {
-    const speed = Number.parseFloat(event.target.value);
-    setPlaybackRate(speed);
-    audioRef.current.playbackRate = speed;
   };
 
   // Skip forward/backward by 10 seconds
@@ -220,14 +215,9 @@ const AudioPlayer = () => {
             className="block w-fit text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           {audioFile && (
-            <button
-              type="button"
-              onClick={handleDeleteAudio}
-              className="hidden md:flex p-2 text-red-500 hover:text-red-700 transition-colors justify-center items-center"
-              aria-label="Delete Audio"
-            >
-              <FaTrashAlt size={18} />
-            </button>
+            <div className="hidden md:flex">
+              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
+            </div>
           )}
         </div>
       </div>
@@ -285,14 +275,9 @@ const AudioPlayer = () => {
             >
               <FaCopy />
             </button>
-            <button
-              type="button"
-              onClick={handleDeleteAudio}
-              className="flex md:hidden ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition justify-center items-center"
-              aria-label="Delete Audio"
-            >
-              <FaTrashAlt />
-            </button>
+            <div className="flex md:hidden">
+              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
+            </div>
           </div>
 
           {/* Progress bar */}
@@ -317,18 +302,8 @@ const AudioPlayer = () => {
           {/* Controls grid */}
           <div className="flex flex-col md:flex-row justify-between items-center w-full mt-4">
             {/* Speed Control */}
-            <div className="hidden md:flex items-center space-x-2 w-40">
-              <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
-              <input
-                type="number"
-                name='speed'
-                step="0.1"
-                min="0.1"
-                max="3"
-                value={playbackRate}
-                onChange={handleSpeedChange}
-                className="w-16 px-2 py-1 border border-slate-500 rounded-lg text-center"
-              />
+            <div className="hidden md:flex items-center justify-center">
+              <PlaybackSpeed playbackRate={playbackRate} setPlaybackRate={setPlaybackRate}/>
             </div>
 
             {/* Play, stop, skip buttons */}
@@ -385,58 +360,11 @@ const AudioPlayer = () => {
             </div>
 
             {/* Volume Control */}
-            <div className="hidden md:flex items-center space-x-2 justify-end w-40">
-              <label htmlFor='volume' className="text-sm font-medium">Volume:</label>
-              <input
-                type="range"
-                name='volume'
-                min="0"
-                max="1"
-                step="0.01"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="w-16 h-2 bg-gray-200 rounded-lg cursor-pointer"
-              />
-            </div>
+            <VolumeBar volume={volume} handleVolumeChange={handleVolumeChange}/>
 
             {/*mobile volumne and speed */}
-            <div className='w-full md:hidden flex justify-start items-center gap-4 mt-4'>
-              <div className='flex items-center gap-2'>
-                <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
-                <div className="flex items-center space-x-2">
-                  {/* Minus Button */}
-                  <button
-                    type="button"
-                    onClick={() => setPlaybackRate((prev) => Math.max(0.1, Number.parseFloat((prev - 0.1).toFixed(1))))}
-                    className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    aria-label="Decrease Speed"
-                  >
-                    <FaMinus/>
-                  </button>
-
-                  {/* Speed Input Field */}
-                  <input
-                    type="number"
-                    name='speed'
-                    step="0.1"
-                    min="0.1"
-                    max="3"
-                    value={playbackRate}
-                    onChange={handleSpeedChange}
-                    className="w-16 px-2 py-1 border border-slate-500 rounded-lg text-center"
-                  />
-
-                  {/* Plus Button */}
-                  <button
-                    type="button"
-                    onClick={() => setPlaybackRate((prev) => Math.min(3, Number.parseFloat((prev + 0.1).toFixed(1))))}
-                    className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    aria-label="Increase Speed"
-                  >
-                    <FaPlus/>
-                  </button>
-                </div>
-              </div>
+            <div className="flex md:hidden items-center justify-center">
+              <PlaybackSpeed playbackRate={playbackRate} setPlaybackRate={setPlaybackRate}/>
             </div>
           </div>
           </div>
