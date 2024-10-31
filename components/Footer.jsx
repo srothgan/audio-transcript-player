@@ -26,7 +26,7 @@ export default function Footer() {
           >
             GitHub Project
           </Link>
-          <Link className="transition hover:text-slate-300" href="/">
+          <Link className="transition hover:text-slate-300" href="/feedback">
             Give Feedback
           </Link>
         </nav>
