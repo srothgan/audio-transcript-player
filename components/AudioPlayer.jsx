@@ -1,10 +1,15 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { FaPlay, FaPause, FaTrashAlt, FaCopy, FaMinus, FaPlus   } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
+import DeleteButton from "./AudioPlayer/DeleteButton";
+import PlaybackSpeed from "./AudioPlayer/PlaybackSpeed";
+import VolumeBar from "./AudioPlayer/VolumeBar";
+import CopyClipboardButton from "./AudioPlayer/CopyClipboardButton";
+import ActionBar from "./AudioPlayer/ActionBar";
+import ProgressBar from "./AudioPlayer/ProgressBar";
+import TimeInput from "./AudioPlayer/TimeInput";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -31,13 +36,6 @@ const AudioPlayer = () => {
       audio.pause();
       setIsPlaying(false);
     }
-  };
-
-  // Handle speed change
-  const handleSpeedChange = (event) => {
-    const speed = Number.parseFloat(event.target.value);
-    setPlaybackRate(speed);
-    audioRef.current.playbackRate = speed;
   };
 
   // Skip forward/backward by 10 seconds
@@ -168,33 +166,7 @@ const AudioPlayer = () => {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
     }
   }
-  const copyToClipboard = () => {
-    const formattedTime = `[${hour}:${min}:${sec}]`;
   
-    // Use navigator.clipboard if available
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(formattedTime)
-        .then(() => toast.success("Copied timestamp to Clipboard successfully!"))
-        .catch((err) => console.error("Clipboard copy failed:", err));
-    } else {
-      // Fallback for mobile browsers: create a temporary input
-      const tempInput = document.createElement("input");
-      tempInput.value = formattedTime;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      tempInput.setSelectionRange(0, tempInput.value.length); // For iOS compatibility
-  
-      try {
-        document.execCommand("copy");
-        toast.success("Copied timestamp to Clipboard successfully!");
-      } catch (err) {
-        console.error("Fallback copy failed:", err);
-        toast.error("Failed to copy timestamp to Clipboard.");
-      } finally {
-        document.body.removeChild(tempInput);
-      }
-    }
-  };
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.playbackRate = playbackRate;
@@ -202,9 +174,13 @@ const AudioPlayer = () => {
   }, [playbackRate]);
 
   return (
-    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow-md mt-8">
+    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4  bg-white border border-gray-200 rounded-lg shadow-md my-8">
       <ToastContainer autoClose={2000} />
-      <div className="flex flex-col mb-4 w-full">
+      {/* Header */}
+      <div className='w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white px-2 py-1 rounded-t-lg'>
+        <p className="text-xl font-semibold tracking-wide italic">Audio Player</p>
+      </div>
+      <div className="flex flex-col w-full px-6  py-3">
         <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
         <div className="flex items-center gap-4 rounded-lg w-full py-2">
           <input
@@ -216,20 +192,15 @@ const AudioPlayer = () => {
             className="block w-fit text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           {audioFile && (
-            <button
-              type="button"
-              onClick={handleDeleteAudio}
-              className="hidden md:flex p-2 text-red-500 hover:text-red-700 transition-colors justify-center items-center"
-              aria-label="Delete Audio"
-            >
-              <FaTrashAlt size={18} />
-            </button>
+            <div className="hidden md:flex">
+              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
+            </div>
           )}
         </div>
       </div>
 
       {audioFile && (
-        <>
+        <div className='px-6 pb-6 w-full flex flex-col'>
           {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
           <audio
             ref={audioRef}
@@ -239,203 +210,43 @@ const AudioPlayer = () => {
 
           {/* Time Input Field */}
           <div className="flex w-full mb-2">
-            <div className="flex items-center space-x-1 bg-white border border-slate-500 rounded-lg px-2 py-1">
-              <input
-                type="text"
-                name="hour"
-                value={hour}
-                onChange={handleHourChange}
-                onFocus={() => setActiveInput("hour")}
-                onBlur={() =>setActiveInput(null)}
-                className="w-10 px-2 text-center focus:outline-none"
-                placeholder="HH"
-              />
-              <span>:</span>
-              <input
-                type="text"
-                name="min"
-                value={min}
-                onChange={handleMinuteChange}
-                onFocus={() => setActiveInput("minute")}
-                onBlur={() =>setActiveInput(null)}
-                className="w-10 px-2 text-center focus:outline-none"
-                placeholder="MM"
-              />
-              <span>:</span>
-              <input
-                type="text"
-                name="sec"
-                value={sec}
-                onChange={handleSecondChange}
-                onFocus={() => setActiveInput("second")}
-                onBlur={() =>setActiveInput(null)}
-                className="w-10 px-2 text-center focus:outline-none"
-                placeholder="SS"
-              />
+            <TimeInput
+              hour={hour}
+              min={min}
+              sec={sec}
+              handleHourChange={handleHourChange}
+              handleMinuteChange={handleMinuteChange}
+              handleSecondChange={handleSecondChange}
+              setActiveInput={setActiveInput}
+            />
+            <CopyClipboardButton hour={hour} min={min} sec={sec} />
+            <div className="flex md:hidden">
+              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
             </div>
-            <button
-              type="button"
-              onClick={copyToClipboard}
-              className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-              aria-label="Copy current time to clipboard"
-            >
-              <FaCopy />
-            </button>
-            <button
-              type="button"
-              onClick={handleDeleteAudio}
-              className="flex md:hidden ml-2 px-2 py-1 bg-slate-200 text-red-600 rounded-lg transition justify-center items-center"
-              aria-label="Delete Audio"
-            >
-              <FaTrashAlt />
-            </button>
           </div>
 
           {/* Progress bar */}
-          <div className="w-full my-4">
-            <input
-              type="range"
-              min="0"
-              max={duration}
-              value={currentTime}
-              onChange={handleProgressChange} // Update here
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
-            </div>
-            <div className='flex lg:hidden text-xs text-gray-500 mt-1'>
-              <span>*The process bar dragable and input work on mobile, only after the audio has been played at least once.</span>
-            </div>
+          <ProgressBar
+            duration={duration}
+            currentTime={currentTime}
+            handleProgressChange={handleProgressChange}
+            formatTime={formatTime}
+          />
+
+          {/* Play, stop, skip buttons */}
+          <div className="flex flex-row justify-center items-center w-full mb-4">
+            <ActionBar isPlaying={isPlaying} togglePlay={togglePlay} skipTime={skipTime}/>
           </div>
 
           {/* Controls grid */}
-          <div className="flex flex-col md:flex-row justify-between items-center w-full mt-4">
+          <div className="flex flex-row justify-between items-center w-full">
             {/* Speed Control */}
-            <div className="hidden md:flex items-center space-x-2 w-40">
-              <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
-              <input
-                type="number"
-                name='speed'
-                step="0.1"
-                min="0.1"
-                max="3"
-                value={playbackRate}
-                onChange={handleSpeedChange}
-                className="w-16 px-2 py-1 border border-slate-500 rounded-lg text-center"
-              />
-            </div>
-
-            {/* Play, stop, skip buttons */}
-            <div className="flex w-full md:w-1/2 justify-between">
-              <button
-                type="button"
-                onClick={() => skipTime(-10)}
-                className="hidden md:flex px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-              >
-                -10s
-              </button>
-              <button
-                type="button"
-                onClick={() => skipTime(-5)}
-                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-              >
-                -5s
-              </button>
-              <button
-                type="button"
-                onClick={() => skipTime(-1)}
-                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-              >
-                -1s
-              </button>
-              <button
-                type="button"
-                onClick={togglePlay}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
-              >
-                {isPlaying ? <FaPause /> : <FaPlay />}
-              </button>
-              <button
-                type="button"
-                onClick={() => skipTime(1)}
-                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-              >
-                +1s
-              </button>
-              <button
-                type="button"
-                onClick={() => skipTime(5)}
-                className="px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-              >
-                +5s
-              </button>
-              <button
-                type="button"
-                onClick={() => skipTime(10)}
-                className="hidden md:flex px-2 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-              >
-                +10s
-              </button>
-            </div>
+            <PlaybackSpeed playbackRate={playbackRate} setPlaybackRate={setPlaybackRate}/>
 
             {/* Volume Control */}
-            <div className="hidden md:flex items-center space-x-2 justify-end w-40">
-              <label htmlFor='volume' className="text-sm font-medium">Volume:</label>
-              <input
-                type="range"
-                name='volume'
-                min="0"
-                max="1"
-                step="0.01"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="w-16 h-2 bg-gray-200 rounded-lg cursor-pointer"
-              />
-            </div>
-
-            {/*mobile volumne and speed */}
-            <div className='w-full md:hidden flex justify-start items-center gap-4 mt-4'>
-              <div className='flex items-center gap-2'>
-                <label htmlFor='speed' className="text-sm font-medium">Speed:</label>
-                <div className="flex items-center space-x-2">
-                  {/* Minus Button */}
-                  <button
-                    type="button"
-                    onClick={() => setPlaybackRate((prev) => Math.max(0.1, Number.parseFloat((prev - 0.1).toFixed(1))))}
-                    className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    aria-label="Decrease Speed"
-                  >
-                    <FaMinus/>
-                  </button>
-
-                  {/* Speed Input Field */}
-                  <input
-                    type="number"
-                    name='speed'
-                    step="0.1"
-                    min="0.1"
-                    max="3"
-                    value={playbackRate}
-                    onChange={handleSpeedChange}
-                    className="w-16 px-2 py-1 border border-slate-500 rounded-lg text-center"
-                  />
-
-                  {/* Plus Button */}
-                  <button
-                    type="button"
-                    onClick={() => setPlaybackRate((prev) => Math.min(3, Number.parseFloat((prev + 0.1).toFixed(1))))}
-                    className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    aria-label="Increase Speed"
-                  >
-                    <FaPlus/>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <VolumeBar volume={volume} handleVolumeChange={handleVolumeChange}/>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
