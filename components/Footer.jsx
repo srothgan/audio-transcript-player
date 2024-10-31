@@ -9,9 +9,9 @@ export default function Footer() {
         {/* GitHub Icon Link */}
         <GitHubLink />
         {/* Project Title */}
-        <p className="font-semibold text-lg md:text-xl tracking-wider">
+        <h4 className="text-xl font-semibold tracking-wider">
           The Audio Transcription Player Project
-        </p>
+        </h4>
 
         {/* Navigation Links */}
         <nav className="flex gap-6 text-sm md:gap-8 md:text-base md:justify-end">
