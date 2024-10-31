@@ -49,8 +49,8 @@ To start the project locally without Docker, ensure you have Node.js installed.
 
 Here's a roadmap of potential improvements:
 
+- [ ] **Fix Mobile Play error**: The process bar dragable and time input only work on mobile after the audio has been played. NEEDS TO BE FIXED.
 - [ ] **Headphone Responsivness**: Enable users to play and pause using headphones.
-- [ ] **Responsive design**: Make the audio player responsive across all screen sizes.
 - [ ] **Load Transcript**: Enable users to upload the transcript for side-by-side editing and automatically mark the current timestamp.
 - [ ] **Store Files Longer**: Implement a solution to store the current audio and, in the future, the transcript even after page reload.
 
