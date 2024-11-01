@@ -174,13 +174,13 @@ const AudioPlayer = () => {
   }, [playbackRate]);
 
   return (
-    <div className="flex flex-col items-center max-w-3xl md:mx-auto mx-4  bg-white border border-gray-200 rounded-lg shadow-md my-8">
+    <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md">
       <ToastContainer autoClose={2000} />
       {/* Header */}
       <div className='w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white px-2 py-1 rounded-t-lg'>
         <p className="text-xl font-semibold tracking-wide italic">Audio Player</p>
       </div>
-      <div className="flex flex-col w-full px-6  py-3">
+      <div className="flex flex-col w-full px-3 md:px-6  py-3">
         <label htmlFor="audio" className="font-semibold">Upload Audio File:</label>
         <div className="flex items-center gap-4 rounded-lg w-full py-2">
           <input
@@ -191,16 +191,11 @@ const AudioPlayer = () => {
             ref={fileInputRef}
             className="block w-fit text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
-          {audioFile && (
-            <div className="hidden md:flex">
-              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
-            </div>
-          )}
         </div>
       </div>
 
       {audioFile && (
-        <div className='px-6 pb-6 w-full flex flex-col'>
+        <div className='px-3 md:px-6 pb-6 w-full flex flex-col'>
           {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
           <audio
             ref={audioRef}
@@ -220,9 +215,7 @@ const AudioPlayer = () => {
               setActiveInput={setActiveInput}
             />
             <CopyClipboardButton hour={hour} min={min} sec={sec} />
-            <div className="flex md:hidden">
-              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
-            </div>
+            <DeleteButton handleDeleteAudio={handleDeleteAudio} />
           </div>
 
           {/* Progress bar */}

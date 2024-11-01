@@ -3,7 +3,7 @@ import { FaPlay, FaPause} from "react-icons/fa";
 export default function ActionBar({isPlaying, togglePlay, skipTime}){
 
     return(
-        <div className="flex w-full md:w-1/2 justify-between">
+        <div className="flex w-full justify-center gap-2">
             <button
             type="button"
             onClick={() => skipTime(-10)}
