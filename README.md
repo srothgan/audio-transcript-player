@@ -51,9 +51,9 @@ Here's a roadmap of potential improvements:
 
 - [ ] **Fix Mobile Play error**: The process bar dragable and time input only work on mobile after the audio has been played. NEEDS TO BE FIXED.
 - [ ] **Headphone Responsivness**: Enable users to play and pause using headphones.
-- [ ] **Feedback form**: Send feedback/contact to owner and not just open email application on user end.
-- [ ] **Load Transcript**: Enable users to upload the transcript for side-by-side editing and automatically mark the current timestamp.
 - [ ] **Store Files Longer**: Implement a solution to store the current audio and, in the future, the transcript even after page reload.
+- [ ] **Users**: User register with accounts
+- [ ] **Multi Page Editing**: Allow users to have multiple audio/transcript projects open. 
 
 ## 📂 Project Structure
 
