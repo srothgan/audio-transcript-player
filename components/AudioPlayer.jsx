@@ -191,11 +191,6 @@ const AudioPlayer = () => {
             ref={fileInputRef}
             className="block w-fit text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
-          {audioFile && (
-            <div className="hidden md:flex">
-              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
-            </div>
-          )}
         </div>
       </div>
 
@@ -220,9 +215,7 @@ const AudioPlayer = () => {
               setActiveInput={setActiveInput}
             />
             <CopyClipboardButton hour={hour} min={min} sec={sec} />
-            <div className="flex md:hidden">
-              <DeleteButton handleDeleteAudio={handleDeleteAudio} />
-            </div>
+            <DeleteButton handleDeleteAudio={handleDeleteAudio} />
           </div>
 
           {/* Progress bar */}
