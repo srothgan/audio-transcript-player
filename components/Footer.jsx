@@ -14,7 +14,7 @@ export default function Footer() {
         </h4>
 
         {/* Navigation Links */}
-        <nav className="flex gap-6 text-sm md:gap-8 md:text-base md:justify-end">
+        <nav className="grid grid-cols-3 gap-4 text-sm justify-center  md:gap-8 md:text-base md:justify-end">
           <Link className="transition hover:text-slate-300" href="/">
             Home
           </Link>
