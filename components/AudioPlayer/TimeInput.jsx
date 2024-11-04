@@ -1,6 +1,6 @@
 // components/AudioPlayer/TimeInput.js
 import React from "react";
-
+import { toast } from 'react-toastify';
 export default function TimeInput({
   hour,
   min,
@@ -10,13 +10,27 @@ export default function TimeInput({
   handleSecondChange,
   setActiveInput,
 }) {
+
+  // Helper function to validate numeric input
+  const validateInput = (value, name) => {
+    if (!/^\d*$/.test(value)) {
+      toast.error(`Invalid input in ${name} field. Only numbers are allowed.`);
+      return false;
+    }
+    return true;
+  };
+
   return (
     <div className="flex items-center space-x-1 bg-white border border-slate-500 rounded-lg px-2 py-1">
       <input
         type="text"
         name="hour"
         value={hour}
-        onChange={handleHourChange}
+        onChange={(e) => {
+          if (validateInput(e.target.value, 'hour')) {
+            handleHourChange(e);
+          }
+        }}
         onFocus={() => setActiveInput("hour")}
         onBlur={() => setActiveInput(null)}
         className="w-10 px-2 text-center focus:outline-none"
@@ -27,7 +41,11 @@ export default function TimeInput({
         type="text"
         name="min"
         value={min}
-        onChange={handleMinuteChange}
+        onChange={(e) => {
+          if (validateInput(e.target.value, 'minute')) {
+            handleMinuteChange(e);
+          }
+        }}
         onFocus={() => setActiveInput("minute")}
         onBlur={() => setActiveInput(null)}
         className="w-10 px-2 text-center focus:outline-none"
@@ -38,7 +56,11 @@ export default function TimeInput({
         type="text"
         name="sec"
         value={sec}
-        onChange={handleSecondChange}
+        onChange={(e) => {
+          if (validateInput(e.target.value, 'second')) {
+            handleSecondChange(e);
+          }
+        }}
         onFocus={() => setActiveInput("second")}
         onBlur={() => setActiveInput(null)}
         className="w-10 px-2 text-center focus:outline-none"

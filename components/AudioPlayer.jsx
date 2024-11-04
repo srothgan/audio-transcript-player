@@ -117,29 +117,44 @@ const AudioPlayer = () => {
   }, [currentTime, activeInput]);
 
   const handleHourChange = (event) => {
-    const newHour = Number.parseInt(event.target.value, 10) || 0;
-    const newTime = newHour * 3600 + Number.parseInt(min, 10) * 60 + Number.parseInt(sec, 10);
-    setHour(formatTimeUnit(newHour));
-    setCurrentTime(newTime);
-    audioRef.current.currentTime = newTime;
+    const value = event.target.value;
+    if (/^\d*$/.test(value)) {
+      const newHour = Number.parseInt(value, 10) || 0;
+      const newTime = newHour * 3600 + Number.parseInt(min, 10) * 60 + Number.parseInt(sec, 10);
+      setHour(formatTimeUnit(newHour));
+      setCurrentTime(newTime);
+      audioRef.current.currentTime = newTime;
+    } else {
+      toast.error("Invalid input in hour field. Only numbers are allowed.");
+    }
   };
 
   // Update currentTime based on manual minute input
   const handleMinuteChange = (event) => {
-    const newMinute = Number.parseInt(event.target.value, 10) || 0;
-    const newTime = Number.parseInt(hour, 10) * 3600 + newMinute * 60 + Number.parseInt(sec, 10);
-    setMin(formatTimeUnit(newMinute));
-    setCurrentTime(newTime);
-    audioRef.current.currentTime = newTime;
+    const value = event.target.value;
+    if (/^\d*$/.test(value)) {
+      const newMinute = Number.parseInt(value, 10) || 0;
+      const newTime = Number.parseInt(hour, 10) * 3600 + newMinute * 60 + Number.parseInt(sec, 10);
+      setMin(formatTimeUnit(newMinute));
+      setCurrentTime(newTime);
+      audioRef.current.currentTime = newTime;
+    } else {
+      toast.error("Invalid input in minute field. Only numbers are allowed.");
+    }
   };
 
   // Update currentTime based on manual second input
   const handleSecondChange = (event) => {
-    const newSecond = Number.parseInt(event.target.value, 10) || 0;
-    const newTime = Number.parseInt(hour, 10) * 3600 + Number.parseInt(min, 10) * 60 + newSecond;
-    setSec(formatTimeUnit(newSecond));
-    setCurrentTime(newTime);
-    audioRef.current.currentTime = newTime;
+    const value = event.target.value;
+    if (/^\d*$/.test(value)) {
+      const newSecond = Number.parseInt(value, 10) || 0;
+      const newTime = Number.parseInt(hour, 10) * 3600 + Number.parseInt(min, 10) * 60 + newSecond;
+      setSec(formatTimeUnit(newSecond));
+      setCurrentTime(newTime);
+      audioRef.current.currentTime = newTime;
+    } else {
+      toast.error("Invalid input in second field. Only numbers are allowed.");
+    }
   };
 
   const handleDeleteAudio = () => {
