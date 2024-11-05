@@ -1,8 +1,9 @@
 import {  FaCopy} from "react-icons/fa";
-import {  toast } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CopyClipboardButton({hour, min, sec}){
+
+  const { toast } = useToast()
 
     const copyToClipboard = () => {
         const formattedTime = `[${hour}:${min}:${sec}]`;
@@ -10,8 +11,16 @@ export default function CopyClipboardButton({hour, min, sec}){
         // Use navigator.clipboard if available
         if (navigator.clipboard?.writeText) {
           navigator.clipboard.writeText(formattedTime)
-            .then(() => toast.success("Copied timestamp to Clipboard successfully!"))
-            .catch((err) => console.error("Clipboard copy failed:", err));
+            .then(() => toast({
+              variant: "success",
+              description: "Copied to Clipboard.",
+            }))
+            .catch((err) => 
+              {console.error("Clipboard copy failed:", err);
+              toast({
+                variant: "destructive",
+                description: "Failed to copy timestamp to Clipboard.",
+              })});
         } else {
           // Fallback for mobile browsers: create a temporary input
           const tempInput = document.createElement("input");
@@ -22,10 +31,16 @@ export default function CopyClipboardButton({hour, min, sec}){
       
           try {
             document.execCommand("copy");
-            toast.success("Copied timestamp to Clipboard successfully!");
+            toast({
+              variant: "success",
+              description: "Copied to Clipboard.",
+            })
           } catch (err) {
             console.error("Fallback copy failed:", err);
-            toast.error("Failed to copy timestamp to Clipboard.");
+            toast({
+              variant: "destructive",
+              description: "Failed to copy timestamp to Clipboard.",
+            })
           } finally {
             document.body.removeChild(tempInput);
           }

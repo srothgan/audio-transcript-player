@@ -1,6 +1,6 @@
 // components/AudioPlayer/TimeInput.js
 import React from "react";
-import { toast } from 'react-toastify';
+import { useToast } from "@/hooks/use-toast";
 export default function TimeInput({
   hour,
   min,
@@ -10,11 +10,14 @@ export default function TimeInput({
   handleSecondChange,
   setActiveInput,
 }) {
-
+  const { toast } = useToast();
   // Helper function to validate numeric input
   const validateInput = (value, name) => {
     if (!/^\d*$/.test(value)) {
-      toast.error(`Invalid input in ${name} field. Only numbers are allowed.`);
+      toast({
+        variant: "destructive",
+        description: `Invalid input in ${name} field. Only numbers are allowed.`,
+      })
       return false;
     }
     return true;

@@ -1,14 +1,15 @@
 "use client"
 import { useState, useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
 import { FaRegSave, FaFileDownload, FaTrashAlt  } from "react-icons/fa";
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "@/hooks/use-toast";
 
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
   const [fileContent, setFileContent] = useState(""); // To display and edit text
   const [originalContent, setOriginalContent] = useState(""); // To track original text
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
+
+  const { toast } = useToast();
 
   // Handle file upload
   const handleFileUpload = (event) => {
@@ -23,7 +24,10 @@ function TextFileUploader() {
       };
       reader.readAsText(file);
     } else {
-      toast.error("Please upload a valid .txt file.");
+      toast({
+        variant: "destructive",
+        description: "Please upload a valid .txt file.",
+      })
     }
   };
 
@@ -37,7 +41,10 @@ function TextFileUploader() {
   const handleSave = () => {
     setOriginalContent(fileContent); // Set current content as the saved state
     setIsModified(false); // Mark as saved
-    toast.success("Changes saved!");
+    toast({
+      variant: "success",
+      description: "Changes saved!",
+    })
   };
 
   // Download the edited content as a .txt file
@@ -59,7 +66,6 @@ function TextFileUploader() {
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4 lg:mt-0">
-      <ToastContainer autoClose={2000} />
       {/* Header */}
       <div className='w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white px-2 py-1 rounded-t-lg'>
         <p className="text-xl font-semibold tracking-wide italic">Transcript Editor</p>
