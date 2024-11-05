@@ -74,7 +74,7 @@ function TextFileUploader() {
       {/* File Upload */}
       <div className="flex flex-col w-full px-3 md:px-6 py-3">
         <label htmlFor="audio" className="font-semibold">Upload Txt File:</label>
-        <div className="flex items-center gap-4 w-full py-2">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full py-2">
             <input
             type="file"
             accept=".txt"
@@ -85,9 +85,10 @@ function TextFileUploader() {
             <button
                 type="button"
                 onClick={handleDeleteTxt}
-                className="px-2 py-1 bg-slate-200 text-red-600 rounded-md transition justify-center items-center"
+                className="px-2 py-1 bg-slate-200 text-red-600 rounded-md transition flex justify-center items-center"
                 aria-label="Delete Txt"
-            >
+            >   
+                <p className='flex font-bold md:hidden mr-2'>Remove Transcript</p>
                 <FaTrashAlt size={18} />
             </button>
             )}
