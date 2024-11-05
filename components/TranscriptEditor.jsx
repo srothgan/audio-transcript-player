@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { FaRegSave, FaFileDownload, FaTrashAlt  } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 
@@ -8,7 +8,7 @@ function TextFileUploader() {
   const [fileContent, setFileContent] = useState(""); // To display and edit text
   const [originalContent, setOriginalContent] = useState(""); // To track original text
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
-
+  const fileInputRef = useRef(null); 
   const { toast } = useToast();
 
   // Handle file upload
@@ -62,6 +62,9 @@ function TextFileUploader() {
     setFileContent("")
     setOriginalContent("")
     setIsModified(false)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Clear the file input to remove the file name
+    }
   }
 
   return (
@@ -79,6 +82,7 @@ function TextFileUploader() {
             type="file"
             accept=".txt"
             onChange={handleFileUpload}
+            ref={fileInputRef}
             className="text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
             {fileName && (
