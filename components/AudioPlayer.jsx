@@ -1,8 +1,6 @@
 // components/AudioPlayer.js
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 import DeleteButton from "./AudioPlayer/DeleteButton";
 import PlaybackSpeed from "./AudioPlayer/PlaybackSpeed";
 import VolumeBar from "./AudioPlayer/VolumeBar";
@@ -10,6 +8,7 @@ import CopyClipboardButton from "./AudioPlayer/CopyClipboardButton";
 import ActionBar from "./AudioPlayer/ActionBar";
 import ProgressBar from "./AudioPlayer/ProgressBar";
 import TimeInput from "./AudioPlayer/TimeInput";
+import { useToast } from "@/hooks/use-toast";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
@@ -25,6 +24,8 @@ const AudioPlayer = () => {
   const [min, setMin] = useState('00')
   const [hour, setHour] = useState('00')
   const [activeInput, setActiveInput] = useState(null);
+
+  const { toast } = useToast();
 
   // Play or stop audio
   const togglePlay = () => {
@@ -67,7 +68,10 @@ const AudioPlayer = () => {
       setCurrentTime(0);
       setIsPlaying(false);
     } else {
-      toast.error("Please upload a valid audio file.");
+      toast({
+        variant: "destructive",
+        description: "Please upload a valid audio file.",
+      })
     }
   };
 
@@ -125,7 +129,10 @@ const AudioPlayer = () => {
       setCurrentTime(newTime);
       audioRef.current.currentTime = newTime;
     } else {
-      toast.error("Invalid input in hour field. Only numbers are allowed.");
+      toast({
+        variant: "destructive",
+        description: "Invalid input in hour field. Only numbers are allowed.",
+      })
     }
   };
 
@@ -139,7 +146,10 @@ const AudioPlayer = () => {
       setCurrentTime(newTime);
       audioRef.current.currentTime = newTime;
     } else {
-      toast.error("Invalid input in minute field. Only numbers are allowed.");
+      toast({
+        variant: "destructive",
+        description: "Invalid input in minute field. Only numbers are allowed.",
+      })
     }
   };
 
@@ -153,7 +163,10 @@ const AudioPlayer = () => {
       setCurrentTime(newTime);
       audioRef.current.currentTime = newTime;
     } else {
-      toast.error("Invalid input in second field. Only numbers are allowed.");
+      toast({
+        variant: "destructive",
+        description: "Invalid input in second field. Only numbers are allowed.",
+      })
     }
   };
 
@@ -190,7 +203,6 @@ const AudioPlayer = () => {
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md">
-      <ToastContainer autoClose={2000} />
       {/* Header */}
       <div className='w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white px-2 py-1 rounded-t-lg'>
         <p className="text-xl font-semibold tracking-wide italic">Audio Player</p>

@@ -1,8 +1,9 @@
 import {  FaCopy} from "react-icons/fa";
-import {  toast } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CopyClipboardButton({hour, min, sec}){
+
+  const { toast } = useToast()
 
     const copyToClipboard = () => {
         const formattedTime = `[${hour}:${min}:${sec}]`;
@@ -10,7 +11,10 @@ export default function CopyClipboardButton({hour, min, sec}){
         // Use navigator.clipboard if available
         if (navigator.clipboard?.writeText) {
           navigator.clipboard.writeText(formattedTime)
-            .then(() => toast.success("Copied timestamp to Clipboard successfully!"))
+            .then(() => toast({
+              variant: "success",
+              description: "Copied to Clipboard.",
+            }))
             .catch((err) => console.error("Clipboard copy failed:", err));
         } else {
           // Fallback for mobile browsers: create a temporary input

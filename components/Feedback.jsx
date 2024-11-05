@@ -4,18 +4,22 @@
 
 import { useRef } from "react";
 import emailjs from "@emailjs/browser";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Feedback({ serviceId, templateId, publicKey }) {
   const formRef = useRef();
+
+  const { toast } = useToast();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formElements = formRef.current.elements;
     if (!formElements.subject.value || !formElements.user_email.value || !formElements.message.value) {
-      toast.error("Please fill in all fields.");
+      toast({
+        variant: "destructive",
+        description: "Please fill in all fields.",
+      })
       return;
     }
 
@@ -23,12 +27,18 @@ export default function Feedback({ serviceId, templateId, publicKey }) {
       .sendForm(serviceId, templateId, formRef.current, publicKey)
       .then(
         () => {
-          toast.success("Email sent successfully!");
+          toast({
+            variant: "success",
+            description: "Email sent successfully!",
+          })
           formRef.current.reset();
         },
         (error) => {
           console.error("Failed to send email:", error);
-          toast.error("Failed to send email.");
+          toast({
+            variant: "destructive",
+            description: "Failed to send email.",
+          })
         }
       );
   };
