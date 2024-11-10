@@ -2,13 +2,15 @@
 import { useState, useRef } from "react";
 import { FaRegSave, FaFileDownload, FaTrashAlt  } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
-
+import Textarea from "./Textarea";
+import { FileDigit } from "lucide-react";
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
   const [fileContent, setFileContent] = useState(""); // To display and edit text
   const [originalContent, setOriginalContent] = useState(""); // To track original text
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
   const fileInputRef = useRef(null); 
+  const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
   const { toast } = useToast();
 
   // Handle file upload
@@ -18,9 +20,10 @@ function TextFileUploader() {
       setFileName(file.name);
       const reader = new FileReader();
       reader.onload = () => {
-        setFileContent(reader.result);
-        setOriginalContent(reader.result); // Set original content for comparison
-        setIsModified(false); // No changes after initial load
+        const content = reader.result.replace(/\r\n|\r/g, "\n"); // Normalize line endings to \n
+        setFileContent(content);
+        setOriginalContent(content);
+        setIsModified(false);
       };
       reader.readAsText(file);
     } else {
@@ -32,9 +35,13 @@ function TextFileUploader() {
   };
 
   // Track content changes
-  const handleContentChange = (event) => {
-    setFileContent(event.target.value);
-    setIsModified(event.target.value !== originalContent); // Check if changes are unsaved
+  const handleContentChange = (newContent) => {
+    setFileContent(newContent);
+    setIsModified(newContent !== originalContent);
+  };
+
+  const handleToggleLineNumbers = () => {
+    setLineNumbersVisible(!lineNumbersVisible);
   };
 
   // Save content and reset unsaved changes indicator
@@ -123,20 +130,26 @@ function TextFileUploader() {
                     onClick={handleDownload}
                     type="button"
                     disabled={!fileContent} // Disable if no file content to download
-                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300"}
+                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300"}
                     >
                         <FaFileDownload/>
+                    </button>
+                    <button
+                    onClick={handleToggleLineNumbers}
+                    type="button"
+                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300"}
+                    >
+                      <FileDigit/>
                     </button>
                 </div>
             </div>
             {/* Text Editor */}
-            <textarea
-                value={fileContent}
-                onChange={handleContentChange}
-                placeholder="Upload a .txt file to start editing..."
-                rows={15}
-                className="w-full p-2 border-2 border-gray-700 resize-none mb-4"
-            />
+            <Textarea
+            fileContent={fileContent}
+            onContentChange={handleContentChange}
+            lineNumbersVisible={lineNumbersVisible}
+            style={{ fontFamily: "monospace" }}
+          />
         </section>
     )}      
     </div>
