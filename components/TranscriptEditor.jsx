@@ -56,6 +56,13 @@ function TextFileUploader() {
 
   // Download the edited content as a .txt file
   const handleDownload = () => {
+    if(isModified){
+      toast({
+        variant: "warn",
+        description: "Unsaved changes. Save before downloading.",
+      })
+      return;
+    }
     const blob = new Blob([fileContent], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
