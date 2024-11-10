@@ -3,8 +3,11 @@
 A web-based audio player built with React and Next.js, offering essential audio controls, time tracking, playback speed adjustments, and volume control, packaged conveniently in a Docker container for easy deployment.
 This audio player is slim and helpful for transcribing interviews or checking existing transcripts.
 
+![TextArea Editor Screenshot](/public/example.png)
+
 ## 📜 Features
 
+### Audio Player
 - **Play/Pause**: Toggle playback of uploaded audio files.
 - **Skip Controls**: Quickly jump backward or forward by predefined intervals.
 - **Playback Speed**: Adjust the playback rate.
@@ -12,6 +15,11 @@ This audio player is slim and helpful for transcribing interviews or checking ex
 - **Volume Control**: Set the audio volume.
 - **Time Display**: Visualize the audio duration and current time in hours, minutes, and seconds.
 - **Time Input**: Jump to specific times in hours, minutes, and seconds.
+
+### Transcript Editor
+- **Upload Txt Files**: Upload Txt files into textarea 
+- **Line Numbering**: Editing with line numbering, taking word wrap into account
+- **Editing, Saving and Download**: Can edit, save and dwonload txt file from textarea 
 
 ## 🐳 Deploying with Docker
 
