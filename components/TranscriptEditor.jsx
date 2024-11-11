@@ -1,6 +1,6 @@
 "use client"
 import { useState, useRef } from "react";
-import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl, FaRegEdit    } from "react-icons/fa";
+import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl, FaRegEdit } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import Textarea from "./Textarea";
 import { hasTouchScreen } from "@/utils/hasTouch";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Search from "./Search";
 
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
@@ -25,7 +26,7 @@ function TextFileUploader() {
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
   const fileInputRef = useRef(null); 
   const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
-  const [isOpen, setIsOpen] = useState(false)
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const isTouchScreen = hasTouchScreen();
   const { toast } = useToast();
 
@@ -83,7 +84,7 @@ function TextFileUploader() {
       return;
     }
     setFileName(newFileName);
-    setIsOpen(false)
+    setDialogIsOpen(false)
     toast({
       variant: "success",
       description: "File name updated!",
@@ -117,6 +118,25 @@ function TextFileUploader() {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
     }
   }
+  const handleSearch = (searchText, isRegex) => {
+    // Implement search functionality here
+  };
+
+  const handleNext = () => {
+    // Implement next functionality here
+  };
+
+  const handlePrevious = () => {
+    // Implement previous functionality here
+  };
+
+  const handleReplace = (replaceText) => {
+    // Implement replace functionality here
+  };
+
+  const handleReplaceAll = (searchText, replaceText, isRegex) => {
+    // Implement replace all functionality here
+  };
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4 lg:mt-0">
@@ -198,7 +218,7 @@ function TextFileUploader() {
         <section className="w-full px-3 md:px-6 flex flex-col">
             <div className="w-full flex flex-row items-center justify-between">
                 {/* Filename Display */}
-                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogTrigger asChild className="flex items-center gap-2 text-white font-bold bg-gray-700 px-2 py-1 h-8 w-fit">
                   <div>
                     <div className="font-bold ">{fileName}</div>
@@ -227,12 +247,12 @@ function TextFileUploader() {
                 </DialogContent>
                 </Dialog>
       
-                <div className="hidden md:flex h-8">
+                <div className="flex h-8">
                     <button
                     onClick={handleSave}
                     type="button"
                     disabled={!isModified} // Disable if no changes
-                    className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300"}
+                    className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300 hidden md:flex"}
                     >
                         <FaRegSave/>
                     </button>
@@ -240,17 +260,24 @@ function TextFileUploader() {
                     onClick={handleDownload}
                     type="button"
                     disabled={!fileContent} // Disable if no file content to download
-                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300"}
+                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300 hidden md:flex"}
                     >
                         <FaFileDownload/>
                     </button>
                     <button
                     onClick={handleToggleLineNumbers}
                     type="button"
-                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300"}
+                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300 hidden md:flex"}
                     >
                       <FaListOl/>
                     </button>
+                    <Search
+                      onSearch={handleSearch}
+                      onNext={handleNext}
+                      onPrevious={handlePrevious}
+                      onReplace={handleReplace}
+                      onReplaceAll={handleReplaceAll}
+                    />
                 </div>
             </div>
             {/* Text Editor */}
