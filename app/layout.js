@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       >
         <Toaster />
         <Navbar />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow overflow-y-auto">{children}</main>
         <Footer />
       </body>
     </html>

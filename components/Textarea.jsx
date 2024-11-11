@@ -62,12 +62,12 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
   }, [fileContent, lineNumbersVisible]);
 
   return (
-    <div className="flex w-full mb-4 border-2 border-gray-700 max-w-3xl" style={{ maxHeight: "400px", overflow: "hidden" }}>
+    <div className="flex w-full mb-4 border-2 border-gray-700" style={{ minHeight: "400px", height: "calc(100vh - 490px)", overflow: "hidden" }}>
       {lineNumbersVisible && (
         <div
           ref={lineNumberRef}
           className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-y-auto select-none"
-          style={{ maxHeight: "400px" }}
+          style={{ minHeight: "400px" }}
         >
           {lineNumbers.map((line, index) => (
             <div key={index} className="text-right text-gray-500">
@@ -85,7 +85,7 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
         placeholder="Enter text..."
         rows={15}
         className="w-full flex-grow p-2 resize-none rounded-none overflow-y-auto"
-        style={{ maxHeight: "400px" }}
+        style={{ minHeight: "400px" }}
       />
     </div>
   );
