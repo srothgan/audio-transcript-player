@@ -50,13 +50,9 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
     }
   };
 
-  const handleScroll = (origin) => {
+  const handleScroll = () => {
     if (textAreaRef.current && lineNumberRef.current) {
-      if (origin === "textArea") {
         lineNumberRef.current.scrollTop = textAreaRef.current.scrollTop;
-      } else if (origin === "lineNumber") {
-        textAreaRef.current.scrollTop = lineNumberRef.current.scrollTop;
-      }
     }
   };
 
@@ -72,9 +68,8 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
       {lineNumbersVisible && (
         <div
           ref={lineNumberRef}
-          className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-y-auto select-none"
+          className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-hidden select-none"
           style={{ minHeight: "400px" }}
-          onScroll={() => handleScroll("lineNumber")}
         >
           {lineNumbers.map((line, index) => (
             <div key={index} className="text-right text-gray-500">
@@ -88,7 +83,7 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
         ref={textAreaRef}
         value={fileContent}
         onChange={(e) => onContentChange(e.target.value)}
-        onScroll={() => handleScroll("textArea")}
+        onScroll={() => handleScroll()}
         placeholder="Enter text..."
         rows={15}
         className="w-full flex-grow p-2 resize-none rounded-none overflow-y-auto"

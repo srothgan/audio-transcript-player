@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl   } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import Textarea from "./Textarea";
+import { hasTouchScreen } from "@/utils/hasTouch";
 
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
@@ -11,6 +12,7 @@ function TextFileUploader() {
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
   const fileInputRef = useRef(null); 
   const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
+  const isTouchScreen = hasTouchScreen();
   const { toast } = useToast();
 
   // Handle file upload
@@ -111,7 +113,16 @@ function TextFileUploader() {
             )}
         </div>
        </div>
+       
        {fileName && (
+        <div>
+        <div>
+          {isTouchScreen && (
+          <div className="w-full px-3 flex items-start justify-start xl:hidden text-xs text-gray-500 mt-1">
+            <span>The sync scroll of line numbers and textarea doesnt work on touch screens.</span>
+          </div>
+          )}
+        </div>
        <div className="w-full px-3 flex items-start justify-start md:hidden h-8 mb-2 space-x-2">
           <button
                 type="button"
@@ -144,6 +155,7 @@ function TextFileUploader() {
           >
             <FaListOl/>
           </button>
+      </div>
       </div>
        )}
       {/* Txt Editor */}
