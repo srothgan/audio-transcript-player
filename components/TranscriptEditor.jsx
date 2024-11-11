@@ -1,17 +1,31 @@
 "use client"
 import { useState, useRef } from "react";
-import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl   } from "react-icons/fa";
+import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl, FaRegEdit    } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import Textarea from "./Textarea";
 import { hasTouchScreen } from "@/utils/hasTouch";
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
+  const [newFileName, setNewFileName] = useState(null); // To store the new file name
   const [fileContent, setFileContent] = useState(""); // To display and edit text
   const [originalContent, setOriginalContent] = useState(""); // To track original text
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
   const fileInputRef = useRef(null); 
   const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false)
   const isTouchScreen = hasTouchScreen();
   const { toast } = useToast();
 
@@ -20,6 +34,7 @@ function TextFileUploader() {
     const file = event.target.files[0];
     if (file && file.type === "text/plain") {
       setFileName(file.name);
+      setNewFileName(file.name);
       const reader = new FileReader();
       reader.onload = () => {
         const content = reader.result.replace(/\r\n|\r/g, "\n"); // Normalize line endings to \n
@@ -55,6 +70,26 @@ function TextFileUploader() {
       description: "Changes saved!",
     })
   };
+  const handleFileNameChange = (event) => {
+    setNewFileName(event.target.value)
+  }
+  const handleSaveFileName = () => {
+    if(!newFileName.endsWith(".txt")){
+      toast({
+        variant: "destructive",
+        description: "File name must end with .txt",
+      });
+      setNewFileName(fileName)
+      return;
+    }
+    setFileName(newFileName);
+    setIsOpen(false)
+    toast({
+      variant: "success",
+      description: "File name updated!",
+    });
+  };
+
 
   // Download the edited content as a .txt file
   const handleDownload = () => {
@@ -163,11 +198,34 @@ function TextFileUploader() {
         <section className="w-full px-3 md:px-6 flex flex-col">
             <div className="w-full flex flex-row items-center justify-between">
                 {/* Filename Display */}
-                <div className="flex items-baseline text-white font-bold bg-gray-700 px-2 py-1 h-8 w-fit">
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild className="flex items-center gap-2 text-white font-bold bg-gray-700 px-2 py-1 h-8 w-fit">
+                  <div>
                     <div className="font-bold ">{fileName}</div>
+                    <FaRegEdit className="text-sm" />
                     {isModified && <div className="w-3 h-3 bg-white rounded-full ml-2" />}
-                </div>
-                
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="mx-4 w-fit mx-auto max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Edit File Name</DialogTitle>
+                    <DialogDescription>
+                      Rename the file to something more meaningful.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-col items-start gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Name
+                      </Label>
+                      <Input id="name" value={newFileName} className="col-span-3" onChange={handleFileNameChange}/>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="button" onClick={handleSaveFileName}>Save changes</Button>
+                  </DialogFooter>
+                </DialogContent>
+                </Dialog>
       
                 <div className="hidden md:flex h-8">
                     <button
