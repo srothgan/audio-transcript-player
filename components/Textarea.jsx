@@ -17,30 +17,32 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
       const usableWidth = textAreaRef.current.clientWidth - paddingLeft - paddingRight;
 
       const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.font = font;
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.font = font;
       }
 
       const updatedLineNumbers = [];
 
       lines.forEach((line, index) => {
-        let lineWidth = 0;
-        let wrappedLines = 1;
+        const words = line.split(' ');
+        let currentLine = '';
+        let lineCount = 1;
 
-        if (ctx) {
-          for (let char of line) {
-            lineWidth += ctx.measureText(char).width;
-            if (lineWidth > usableWidth) {
-              wrappedLines += 1;
-              lineWidth = ctx.measureText(char).width;
-            }
+        words.forEach((word) => {
+          const testLine = currentLine + word + ' ';
+          const width = context.measureText(testLine).width;
+
+          if (width > usableWidth && currentLine !== '') {
+            lineCount++;
+            currentLine = word + ' ';
+          } else {
+            currentLine = testLine;
           }
-        }
+        });
 
-        updatedLineNumbers.push(index + 1);
-        for (let i = 1; i < wrappedLines; i++) {
-          updatedLineNumbers.push(0);
+        for (let i = 0; i < lineCount; i++) {
+          updatedLineNumbers.push(index + 1);
         }
       });
 
@@ -50,7 +52,7 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
 
   const handleScroll = () => {
     if (textAreaRef.current && lineNumberRef.current) {
-      lineNumberRef.current.scrollTop = textAreaRef.current.scrollTop;
+        lineNumberRef.current.scrollTop = textAreaRef.current.scrollTop;
     }
   };
 
@@ -62,16 +64,16 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
   }, [fileContent, lineNumbersVisible]);
 
   return (
-    <div className="flex w-full mb-4 border-2 border-gray-700 max-w-3xl" style={{ maxHeight: "400px", overflow: "hidden" }}>
+    <div className="flex w-full mb-4 border-2 border-gray-700" style={{ minHeight: "400px", height: "calc(100vh - 490px)", overflow: "hidden" }}>
       {lineNumbersVisible && (
         <div
           ref={lineNumberRef}
-          className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-y-auto select-none"
-          style={{ maxHeight: "400px" }}
+          className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-hidden select-none"
+          style={{ minHeight: "400px" }}
         >
           {lineNumbers.map((line, index) => (
             <div key={index} className="text-right text-gray-500">
-              {line === 0 ? <p className="text-white">0</p> : line}
+              {line === lineNumbers[index-1] ? <p className="text-white">0</p> : line}
             </div>
           ))}
         </div>
@@ -81,11 +83,11 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
         ref={textAreaRef}
         value={fileContent}
         onChange={(e) => onContentChange(e.target.value)}
-        onScroll={handleScroll}
+        onScroll={() => handleScroll()}
         placeholder="Enter text..."
         rows={15}
         className="w-full flex-grow p-2 resize-none rounded-none overflow-y-auto"
-        style={{ maxHeight: "400px" }}
+        style={{ minHeight: "400px" }}
       />
     </div>
   );

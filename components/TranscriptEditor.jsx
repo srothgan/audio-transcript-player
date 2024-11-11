@@ -1,9 +1,10 @@
 "use client"
 import { useState, useRef } from "react";
-import { FaRegSave, FaFileDownload, FaTrashAlt  } from "react-icons/fa";
+import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl   } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import Textarea from "./Textarea";
-import { FileDigit } from "lucide-react";
+import { hasTouchScreen } from "@/utils/hasTouch";
+
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
   const [fileContent, setFileContent] = useState(""); // To display and edit text
@@ -11,6 +12,7 @@ function TextFileUploader() {
   const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
   const fileInputRef = useRef(null); 
   const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
+  const isTouchScreen = hasTouchScreen();
   const { toast } = useToast();
 
   // Handle file upload
@@ -103,16 +105,59 @@ function TextFileUploader() {
             <button
                 type="button"
                 onClick={handleDeleteTxt}
-                className="px-2 py-1 bg-slate-200 text-red-600 rounded-md transition flex justify-center items-center"
+                className="hidden px-2 py-1 bg-slate-200 text-red-600 rounded-md transition md:flex justify-center items-center"
                 aria-label="Delete Txt"
             >   
-                <p className='flex font-bold md:hidden mr-2'>Remove Transcript</p>
                 <FaTrashAlt size={18} />
             </button>
             )}
         </div>
        </div>
-
+       
+       {fileName && (
+        <div>
+        <div>
+          {isTouchScreen && (
+          <div className="w-full px-3 flex items-start justify-start xl:hidden text-xs text-gray-500 mb-2">
+            <span>The sync scroll of line numbers and textarea doesnt work well on touch screens.</span>
+          </div>
+          )}
+        </div>
+       <div className="w-full px-3 flex items-start justify-start md:hidden h-8 mb-2 space-x-2">
+          <button
+                type="button"
+                onClick={handleDeleteTxt}
+                className="px-2 h-8 py-1 bg-slate-200 text-red-600 rounded-md transition flex justify-center items-center"
+                aria-label="Delete Txt"
+            >   
+                <FaTrashAlt size={18} />
+            </button>
+          <button
+          onClick={handleSave}
+          type="button"
+          disabled={!isModified} // Disable if no changes
+          className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300"}
+          >
+              <FaRegSave/>
+          </button>
+          <button
+          onClick={handleDownload}
+          type="button"
+          disabled={!fileContent} // Disable if no file content to download
+          className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300"}
+          >
+              <FaFileDownload/>
+          </button>
+          <button
+          onClick={handleToggleLineNumbers}
+          type="button"
+          className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300"}
+          >
+            <FaListOl/>
+          </button>
+      </div>
+      </div>
+       )}
       {/* Txt Editor */}
       {fileName && (
         <section className="w-full px-3 md:px-6 flex flex-col">
@@ -123,8 +168,8 @@ function TextFileUploader() {
                     {isModified && <div className="w-3 h-3 bg-white rounded-full ml-2" />}
                 </div>
                 
-        
-                <div className="flex h-8">
+      
+                <div className="hidden md:flex h-8">
                     <button
                     onClick={handleSave}
                     type="button"
@@ -146,7 +191,7 @@ function TextFileUploader() {
                     type="button"
                     className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300"}
                     >
-                      <FileDigit/>
+                      <FaListOl/>
                     </button>
                 </div>
             </div>
