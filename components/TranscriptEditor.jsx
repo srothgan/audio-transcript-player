@@ -118,8 +118,8 @@ function TextFileUploader() {
         <div>
         <div>
           {isTouchScreen && (
-          <div className="w-full px-3 flex items-start justify-start xl:hidden text-xs text-gray-500 mt-1">
-            <span>The sync scroll of line numbers and textarea doesnt work on touch screens.</span>
+          <div className="w-full px-3 flex items-start justify-start xl:hidden text-xs text-gray-500 mb-2">
+            <span>The sync scroll of line numbers and textarea doesnt work well on touch screens.</span>
           </div>
           )}
         </div>

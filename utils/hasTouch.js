@@ -1,5 +1,9 @@
-// utils.js
+// utils/hasTouch.js
 export const hasTouchScreen = () => {
+    if (typeof window === "undefined" || typeof navigator === "undefined") {
+      return false; // Return false if not in a browser environment
+    }
+  
     if ("maxTouchPoints" in navigator) {
       return navigator.maxTouchPoints > 0;
     } else if ("msMaxTouchPoints" in navigator) {
