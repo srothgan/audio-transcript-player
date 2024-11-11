@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl   } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import Textarea from "./Textarea";
-import { FileDigit } from "lucide-react";
+
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
   const [fileContent, setFileContent] = useState(""); // To display and edit text

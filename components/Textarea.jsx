@@ -17,30 +17,32 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
       const usableWidth = textAreaRef.current.clientWidth - paddingLeft - paddingRight;
 
       const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.font = font;
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.font = font;
       }
 
       const updatedLineNumbers = [];
 
       lines.forEach((line, index) => {
-        let lineWidth = 0;
-        let wrappedLines = 1;
+        const words = line.split(' ');
+        let currentLine = '';
+        let lineCount = 1;
 
-        if (ctx) {
-          for (let char of line) {
-            lineWidth += ctx.measureText(char).width;
-            if (lineWidth > usableWidth) {
-              wrappedLines += 1;
-              lineWidth = ctx.measureText(char).width;
-            }
+        words.forEach((word) => {
+          const testLine = currentLine + word + ' ';
+          const width = context.measureText(testLine).width;
+
+          if (width > usableWidth && currentLine !== '') {
+            lineCount++;
+            currentLine = word + ' ';
+          } else {
+            currentLine = testLine;
           }
-        }
+        });
 
-        updatedLineNumbers.push(index + 1);
-        for (let i = 1; i < wrappedLines; i++) {
-          updatedLineNumbers.push(0);
+        for (let i = 0; i < lineCount; i++) {
+          updatedLineNumbers.push(index + 1);
         }
       });
 
@@ -76,7 +78,7 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
         >
           {lineNumbers.map((line, index) => (
             <div key={index} className="text-right text-gray-500">
-              {line === 0 ? <p className="text-white">0</p> : line}
+              {line === lineNumbers[index-1] ? <p className="text-white">0</p> : line}
             </div>
           ))}
         </div>
