@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 
-export default function Textarea({ fileContent, onContentChange, lineNumbersVisible }) {
+export default function Textarea({ fileContent, onContentChange, lineNumbersVisible, searchText, isRegex, searchOpen, searchTriggered }) {
   const textAreaRef = useRef(null);
   const lineNumberRef = useRef(null);
+  const highlightRef = useRef(null);
   const [lineNumbers, setLineNumbers] = useState([]);
+  
 
   const calculateLineNumbers = () => {
     if (textAreaRef.current) {
@@ -51,10 +53,29 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
   };
 
   const handleScroll = () => {
-    if (textAreaRef.current && lineNumberRef.current) {
+    if (textAreaRef.current && lineNumberRef.current && highlightRef.current) {
         lineNumberRef.current.scrollTop = textAreaRef.current.scrollTop;
+        highlightRef.current.scrollTop = textAreaRef.current.scrollTop;
     }
   };
+  const highlightText = () => {
+    if (!searchOpen || !searchText || !searchTriggered) {
+      return fileContent;
+    }
+
+    const regex = isRegex ? new RegExp(searchText, "gi") : new RegExp(searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "gi");
+    return fileContent.replace(regex, (match) => {
+      return `<mark class="bg-yellow-200">${match}</mark>`;
+    });
+  };
+
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.innerHTML = highlightText();
+    }
+    console.log("searching for", searchText, "regex", isRegex);
+  }, [fileContent, searchText, isRegex]);
+
 
   useEffect(() => {
     calculateLineNumbers();
@@ -78,7 +99,14 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
           ))}
         </div>
       )}
-    
+      <div className="relative w-full flex-grow">
+
+      <div
+        ref={highlightRef}
+        className="absolute inset-0 p-2 whitespace-pre-wrap overflow-y-auto bg-transparent pointer-events-none p2- rounded-none"
+        style={{ pointerEvents: "none" }}
+        dangerouslySetInnerHTML={{ __html: highlightText() }}
+      />
       <textarea
         ref={textAreaRef}
         value={fileContent}
@@ -89,6 +117,7 @@ export default function Textarea({ fileContent, onContentChange, lineNumbersVisi
         className="w-full flex-grow p-2 resize-none rounded-none overflow-y-auto"
         style={{ minHeight: "400px" }}
       />
+      </div> 
     </div>
   );
 }

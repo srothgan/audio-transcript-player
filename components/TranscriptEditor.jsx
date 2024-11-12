@@ -1,5 +1,5 @@
 "use client"
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect} from "react";
 import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl, FaRegEdit } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import Textarea from "./Textarea";
@@ -28,6 +28,13 @@ function TextFileUploader() {
   const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const isTouchScreen = hasTouchScreen();
+
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchText, setSearchText] = useState("")
+  const [replaceText, setReplaceText] = useState("")
+  const [isRegex, setIsRegex] = useState(false)
+  const [searchTriggered, setSearchTriggered] = useState(false)
+
   const { toast } = useToast();
 
   // Handle file upload
@@ -119,15 +126,16 @@ function TextFileUploader() {
     }
   }
   const handleSearch = (searchText, isRegex) => {
-    // Implement search functionality here
+    console.log("Searching for", searchText, "with regex", isRegex);
+    setSearchTriggered(true);
   };
 
   const handleNext = () => {
-    // Implement next functionality here
+    console.log("Next");
   };
 
   const handlePrevious = () => {
-    // Implement previous functionality here
+    console.log("Previous");
   };
 
   const handleReplace = (replaceText) => {
@@ -137,6 +145,14 @@ function TextFileUploader() {
   const handleReplaceAll = (searchText, replaceText, isRegex) => {
     // Implement replace all functionality here
   };
+  useEffect(() => {
+    if(searchTriggered){
+      setSearchTriggered(false)
+    }
+    if(isRegex){
+      setIsRegex(false);
+    }
+  }, [searchOpen]);
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4 lg:mt-0">
@@ -277,6 +293,14 @@ function TextFileUploader() {
                       onPrevious={handlePrevious}
                       onReplace={handleReplace}
                       onReplaceAll={handleReplaceAll}
+                      open={searchOpen}
+                      setOpen={setSearchOpen}
+                      searchText={searchText}
+                      setSearchText={setSearchText}
+                      replaceText={replaceText}
+                      setReplaceText={setReplaceText}
+                      isRegex={isRegex}
+                      setIsRegex={setIsRegex}
                     />
                 </div>
             </div>
@@ -286,6 +310,10 @@ function TextFileUploader() {
             onContentChange={handleContentChange}
             lineNumbersVisible={lineNumbersVisible}
             style={{ fontFamily: "monospace" }}
+            searchText={searchText}
+            isRegex={isRegex}
+            searchOpen={searchOpen}
+            searchTriggered={searchTriggered}
           />
         </section>
     )}      

@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from "react"
+import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
@@ -14,30 +14,19 @@ import { FaSearch, FaArrowLeft, FaArrowRight, FaExchangeAlt } from 'react-icons/
 import { VscRegex } from "react-icons/vsc";
 import { LuReplace, LuReplaceAll } from "react-icons/lu";
 
-export default function Search({onSearch, onNext, onPrevious, onReplace, onReplaceAll}){  
-  const [open, setOpen] = React.useState(false)
-  const [searchText, setSearchText] = React.useState("")
-  const [replaceText, setReplaceText] = React.useState("")
-  const [isRegex, setIsRegex] = React.useState(false)
-  const [showReplace, setShowReplace] = React.useState(false)
+export default function Search({onSearch, onNext, onPrevious, onReplace, onReplaceAll, open, setOpen, searchText, setSearchText, isRegex, setIsRegex, replaceText, setReplaceText}) {  
+ 
+  const [showReplace, setShowReplace] = useState(false)
 
-  const handleSearch = React.useCallback(() => {
+  const handleSearch = () => {
     onSearch(searchText, isRegex)
-  }, [searchText, isRegex, onSearch])
-
-  const handleReplace = React.useCallback(() => {
-    onReplace(replaceText)
-  }, [replaceText, onReplace])
-
-  const handleReplaceAll = React.useCallback(() => {
-    onReplaceAll(searchText, replaceText, isRegex)
-  }, [searchText, replaceText, isRegex, onReplaceAll])
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button 
-          className="p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-600 border-l border-gray-300 rounded-none"
+          className="p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-600 md:border-l md:border-gray-300 rounded-none"
         >
           <FaSearch className="h-4 w-4" />
         </Button>
