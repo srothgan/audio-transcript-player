@@ -103,13 +103,24 @@ function TranscriptEditor() {
             </button>
             )}
         </div>
+        {creationType && (
+          <button
+            type="button"
+            onClick={handleDeleteTxt}
+            className="flex px-2 py-1 my-2 bg-slate-200 text-red-600 rounded-md transition md:hidden gap-1 font-bold w-fit justify-center items-center"
+            aria-label="Delete Txt"
+            >   
+            <p>Delete</p>
+            <FaTrashAlt size={18} />
+          </button>
+        )}
       </div>
        
       {fileName && fileContent && (
         <div className="w-full px-3 md:px-6 flex flex-col">
           {isTouchScreen && (
           <div className="w-full flex items-start justify-start xl:hidden text-xs text-gray-500 mb-2">
-            <span>The sync scroll of line numbers and textarea doesnt work well on touch screens.</span>
+            <span>The calculation and sync scroll of line numbers and textarea doesnt work well on touch/small screens.</span>
           </div>
           )}
           <section className="w-full flex flex-col">
