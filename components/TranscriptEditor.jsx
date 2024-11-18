@@ -11,6 +11,7 @@ function TranscriptEditor() {
   const [fileContent, setFileContent] = useState(""); // To display and edit text
   const fileInputRef = useRef(null); 
   const isTouchScreen = hasTouchScreen();
+  const [creationType, setCreationType] = useState("");
 
   const { toast } = useToast();
 
@@ -24,6 +25,7 @@ function TranscriptEditor() {
         setFileName(file.name);
         setNewFileName(file.name);
         setFileContent(content);
+        setCreationType("upload")
       };
       reader.readAsText(file);
     } else {
@@ -40,6 +42,16 @@ function TranscriptEditor() {
     }
     setFileName(null)
     setFileContent("")
+    setCreationType("")
+  };
+
+  const handleCreateEmptyFile = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Clear the file input to remove the file name
+    }
+    setFileName('untitled.txt');
+    setFileContent("[00:00:00] - ");
+    setCreationType("empty")
   };
 
   return (
@@ -60,7 +72,27 @@ function TranscriptEditor() {
             ref={fileInputRef}
             className="text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
-            {fileName && (
+            {creationType=="upload" && (
+            <button
+                type="button"
+                onClick={handleDeleteTxt}
+                className="hidden px-2 py-1 bg-slate-200 text-red-600 rounded-md transition md:flex justify-center items-center"
+                aria-label="Delete Txt"
+            >   
+                <FaTrashAlt size={18} />
+            </button>
+            )}
+        </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full py-2">
+          <button
+              type="button"
+              onClick={handleCreateEmptyFile}
+              className="w-fit py-2 px-4 rounded-full border-0 text-sm font-bold bg-blue-50 text-blue-700 hover:bg-blue-100"
+              aria-label="Create Empty File"
+            >
+              Create Empty File
+          </button>
+          {creationType=="empty" && (
             <button
                 type="button"
                 onClick={handleDeleteTxt}
