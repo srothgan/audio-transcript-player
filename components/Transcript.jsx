@@ -407,7 +407,7 @@ export default function Transcript({fileContent, fileName}){
                 {lineNumbersVisible && (
                     <div
                     ref={lineNumberRef}
-                    className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-hidden select-none"
+                    className="w-10 flex items-start flex-col border-r-2 border-slate-300 p-2 overflow-hidden select-none h-full"
                     style={{ minHeight: "500px" }}
                     >
                     {lineNumbers.map((line, index) => (
@@ -417,111 +417,111 @@ export default function Transcript({fileContent, fileName}){
                     ))}
                     </div>
                 )}
-                <div className="relative w-full flex-grow">
-                {showSearchUI && (
-                    <div className="absolute top-0 right-0 bg-gray-800 p-2 rounded-b-lg rounded-l-lg shadow-lg w-full sm:w-fit z-50 border border-gray-700">
-                        {/* Search Row */}
-                        <div className="flex items-center space-x-2 mb-2">
-                            {/* Toggle Replace Button */}
-                            <Button
-                                onClick={() => setShowReplace(!showReplace)}
-                                size="icon"
-                                className="flex items-center justify-center w-8 h-8 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
-                            >
-                                {showReplace ? <FaArrowDown className="h-4 w-4" /> : <FaArrowRight className="h-4 w-4" />}
-                            </Button>
+                <div className="relative w-full h-full">
+                    {showSearchUI && (
+                        <div className="absolute top-0 right-0 bg-gray-800 p-2 rounded-b-lg rounded-l-lg shadow-lg w-full sm:w-fit z-50 border border-gray-700">
+                            {/* Search Row */}
+                            <div className="flex items-center space-x-2 mb-2">
+                                {/* Toggle Replace Button */}
+                                <Button
+                                    onClick={() => setShowReplace(!showReplace)}
+                                    size="icon"
+                                    className="flex items-center justify-center w-8 h-8 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
+                                >
+                                    {showReplace ? <FaArrowDown className="h-4 w-4" /> : <FaArrowRight className="h-4 w-4" />}
+                                </Button>
 
-                            {/* Search Input */}
-                            <Input
-                                type="text"
-                                placeholder="Search..."
-                                value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
-                                className="w-40 flex-grow bg-gray-700 text-gray-200 placeholder-gray-400 rounded border-none focus:ring-1 focus:ring-blue-500"
-                            />
-
-                            {/* Results Display */}
-                            <div className="text-gray-400 text-sm w-20 text-left">
-                                {searchResults.length > 0 ? `${currentIndex + 1} of ${searchResults.length}` : "0 / 0"}
-                            </div>
-
-                            {/* Regex Toggle */}
-                            <Button
-                                onClick={() => setIsRegex(!isRegex)}
-                                size="icon"
-                                className={`flex items-center justify-center w-8 h-8 ${
-                                    isRegex ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600'
-                                }`}
-                            >
-                                <VscRegex className="h-4 w-4" />
-                            </Button>
-
-                            {/* Navigation Buttons */}
-                            <Button
-                                onClick={onPrevious}
-                                size="icon"
-                                className="flex items-center justify-center w-8 h-8 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
-                            >
-                                <FaArrowUp className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                onClick={onNext}
-                                size="icon"
-                                className="flex items-center justify-center w-8 h-8 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
-                            >
-                                <FaArrowDown className="h-4 w-4" />
-                            </Button>
-                        </div>
-
-                        {/* Replace Row */}
-                        {showReplace && (
-                            <div className="flex items-center space-x-2">
-                                <div className='w-12 h-8'/>
-                                {/* Replace Input */}
+                                {/* Search Input */}
                                 <Input
                                     type="text"
-                                    placeholder="Replace with..."
-                                    value={replaceText}
-                                    onChange={(e) => setReplaceText(e.target.value)}
-                                    className="flex-grow bg-gray-700 text-gray-200 placeholder-gray-400 rounded border-none focus:ring-1 focus:ring-blue-500"
+                                    placeholder="Search..."
+                                    value={searchText}
+                                    onChange={(e) => setSearchText(e.target.value)}
+                                    className="w-40 flex-grow bg-gray-700 text-gray-200 placeholder-gray-400 rounded border-none focus:ring-1 focus:ring-blue-500"
                                 />
 
-                                {/* Replace Buttons */}
+                                {/* Results Display */}
+                                <div className="text-gray-400 text-sm w-20 text-left">
+                                    {searchResults.length > 0 ? `${currentIndex + 1} of ${searchResults.length}` : "0 / 0"}
+                                </div>
+
+                                {/* Regex Toggle */}
                                 <Button
-                                    onClick={onReplace}
-                                    className="flex items-center justify-center px-3 py-1 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
+                                    onClick={() => setIsRegex(!isRegex)}
+                                    size="icon"
+                                    className={`flex items-center justify-center w-8 h-8 ${
+                                        isRegex ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600'
+                                    }`}
                                 >
-                                    <LuReplace/>
+                                    <VscRegex className="h-4 w-4" />
+                                </Button>
+
+                                {/* Navigation Buttons */}
+                                <Button
+                                    onClick={onPrevious}
+                                    size="icon"
+                                    className="flex items-center justify-center w-8 h-8 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
+                                >
+                                    <FaArrowUp className="h-4 w-4" />
                                 </Button>
                                 <Button
-                                    onClick={onReplaceAll}
-                                    className="flex items-center justify-center px-3 py-1 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
+                                    onClick={onNext}
+                                    size="icon"
+                                    className="flex items-center justify-center w-8 h-8 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
                                 >
-                                    <LuReplaceAll/>
+                                    <FaArrowDown className="h-4 w-4" />
                                 </Button>
                             </div>
-                        )}
-                    </div>
-                )}
-                <div
-                    ref={highlightRef}
-                    className="absolute inset-0 p-2 whitespace-pre-wrap overflow-y-auto bg-transparent pointer-events-none"
-                    style={{ pointerEvents: "none" }}
-                    dangerouslySetInnerHTML={{
-                        __html: showSearchUI ? highlightedContent : content,
-                    }}
-                />
-                <textarea
-                    ref={textAreaRef}
-                    value={content}
-                    onChange={(e) => onContentChange(e.target.value)}
-                    onScroll={handleScroll}
-                    placeholder="Enter text..."
-                    rows={15}
-                    className="w-full flex-grow p-2 resize-none rounded-none overflow-y-auto overscroll-none"
-                    style={{ minHeight: "500px" }}
-                />
-        </div> 
+
+                            {/* Replace Row */}
+                            {showReplace && (
+                                <div className="flex items-center space-x-2">
+                                    <div className='w-12 h-8'/>
+                                    {/* Replace Input */}
+                                    <Input
+                                        type="text"
+                                        placeholder="Replace with..."
+                                        value={replaceText}
+                                        onChange={(e) => setReplaceText(e.target.value)}
+                                        className="flex-grow bg-gray-700 text-gray-200 placeholder-gray-400 rounded border-none focus:ring-1 focus:ring-blue-500"
+                                    />
+
+                                    {/* Replace Buttons */}
+                                    <Button
+                                        onClick={onReplace}
+                                        className="flex items-center justify-center px-3 py-1 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
+                                    >
+                                        <LuReplace/>
+                                    </Button>
+                                    <Button
+                                        onClick={onReplaceAll}
+                                        className="flex items-center justify-center px-3 py-1 bg-gray-700 text-gray-400 hover:text-white hover:bg-gray-600"
+                                    >
+                                        <LuReplaceAll/>
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    <div
+                        ref={highlightRef}
+                        className="absolute inset-0 p-2 whitespace-pre-wrap overflow-y-auto bg-transparent pointer-events-none"
+                        style={{ pointerEvents: "none" }}
+                        dangerouslySetInnerHTML={{
+                            __html: showSearchUI ? highlightedContent : content,
+                        }}
+                    />
+                    <textarea
+                        ref={textAreaRef}
+                        value={content}
+                        onChange={(e) => onContentChange(e.target.value)}
+                        onScroll={handleScroll}
+                        placeholder="Enter text..."
+                        
+                        className="w-full h-full p-2 resize-none rounded-none overflow-y-auto overscroll-none"
+                        style={{ minHeight: "500px", flexGrow: 1 }}
+                    />
+                </div> 
             </div>
         </section>
     )

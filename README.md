@@ -1,11 +1,16 @@
-# 🎶 Audio Player
+# 🎶 Transcript Editor
 
-A web-based audio player built with React and Next.js, offering essential audio controls, time tracking, playback speed adjustments, and volume control, packaged conveniently in a Docker container for easy deployment.
-This audio player is slim and helpful for transcribing interviews or checking existing transcripts.
+A web-based transcript editor built with Next.js, offering essential transcript editing functionality, like search and line numbers with an audio player included and packaged conveniently in a Docker container for easy deployment. This tool is ideal for transcribing interviews or reviewing existing transcripts.
 
 ![TextArea Editor Screenshot](/public/example.png)
 
 ## 📜 Features
+
+### Transcript Editor
+- **Upload Txt Files**: Upload text files into the textarea.
+- **Line Numbering**: Edit with line numbering, taking word wrap into account.
+- **Editing, Saving, and Downloading**: Edit, save, and download text files from the textarea.
+- **Search, Iterate, and Replace**: Search through the transcript with buttons and replace foun value.
 
 ### Audio Player
 - **Play/Pause**: Toggle playback of uploaded audio files.
@@ -16,26 +21,21 @@ This audio player is slim and helpful for transcribing interviews or checking ex
 - **Time Display**: Visualize the audio duration and current time in hours, minutes, and seconds.
 - **Time Input**: Jump to specific times in hours, minutes, and seconds.
 
-### Transcript Editor
-- **Upload Txt Files**: Upload Txt files into textarea 
-- **Line Numbering**: Editing with line numbering, taking word wrap into account
-- **Editing, Saving and Download**: Can edit, save and dwonload txt file from textarea 
-
 ## 🐳 Deploying with Docker
 
 To run the application in a Docker container, follow these steps:
 
 1. **Build the Docker Image**:
     ```bash
-    docker build -t audio-player .
+    docker build -t transcript-editor .
     ```
 
 2. **Run the Docker Container**:
     ```bash
-    docker run -p 3000:3000 audio-player
+    docker run -p 3000:3000 transcript-editor
     ```
 
-   This will start the application on port `3000`. Open your browser and navigate to `http://localhost:3000` to access the Audio Player.
+   This will start the application on port `3000`. Open your browser and navigate to `http://localhost:3000` to access the Transcript Editor.
 
 ## 🚀 Getting Started (without Docker)
 
@@ -57,17 +57,17 @@ To start the project locally without Docker, ensure you have Node.js installed.
 
 Here's a roadmap of potential improvements:
 
-- [ ] **Fix Mobile Play error**: The process bar dragable and time input only work on mobile after the audio has been played. NEEDS TO BE FIXED.
-- [ ] **Headphone Responsivness**: Enable users to play and pause using headphones.
+- [ ] **Fix Mobile Play Error**: The audio playback, line calculations, and scroll syncing are buggy.
+- [ ] **Headphone Responsiveness**: Enable users to play and pause using headphones.
 - [ ] **Store Files Longer**: Implement a solution to store the current audio and, in the future, the transcript even after page reload.
-- [ ] **Users**: User register with accounts
-- [ ] **Multi Page Editing**: Allow users to have multiple audio/transcript projects open. 
+- [ ] **Multi Page Editing**: Allow users to have multiple audio/transcript projects open.
 
 ## 📂 Project Structure
 
-- **`components/`** - Contains the Audio Player component.
-- **`public/`** - Public assets for the app.
-- **`Dockerfile`** - Configuration for Docker deployment.
+- **`components/`** - Contains the Transcript Editor and Audio Player component.
+- **`public/`** - Example Image and Icons.
+- **`app/about`** - Short additional description.
+- **`app/feedback`** - Feedback form additonal input for improvements.
 
 ---
 
