@@ -17,7 +17,7 @@ export default function AboutPage() {
           Whether you need to transcribe a meeting, interview, podcast, or any other audio file, this tool is designed to help. 
           By allowing you to work with the audio file and transcript side by side, it aims to make transcription smoother and more efficient.
         </p>
-        <p className="mt-2">
+        <p className="mt-2 text-gray-600">
           I created this web application because I couldn&apos;t find a similar tool. Switching between a text editor and an audio player while 
           transcribing or proof-reading AI-generated transcripts was unnecessarily complicated. This tool solves that problem.
         </p>
