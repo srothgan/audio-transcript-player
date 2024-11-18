@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
           type="image/png"
           sizes="32x32"
         />
-        <link rel="canonical" href="transcript-edit.vercel.app" />
+        <link rel="canonical" href="https://transcript-edit.vercel.app/" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
               "@type": "WebApplication",
               name: "Transcript Editor",
               description: "Edit and manage your transcripts effortlessly with our advanced transcript editor.",
-              url: "transcript-edit.vercel.app",
+              url: "https://transcript-edit.vercel.app/",
               creator: {
                 "@type": "Person",
                 name: "Simon Rothgang",
