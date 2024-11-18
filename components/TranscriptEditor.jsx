@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Search from "./Search";
+import Transcript from "./Transcript";
 
 function TextFileUploader() {
   const [fileName, setFileName] = useState(null); // To store the file name
@@ -34,6 +35,8 @@ function TextFileUploader() {
   const [replaceText, setReplaceText] = useState("")
   const [isRegex, setIsRegex] = useState(false)
   const [searchTriggered, setSearchTriggered] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [foundPositions, setFoundPositions] = useState([]);
 
   const { toast } = useToast();
 
@@ -131,10 +134,20 @@ function TextFileUploader() {
   };
 
   const handleNext = () => {
+    if(currentIndex === foundPositions.length - 1){
+      setCurrentIndex(0);
+      return;
+    }
+    setCurrentIndex(currentIndex + 1);
     console.log("Next");
   };
 
   const handlePrevious = () => {
+    if(currentIndex === 0){
+      setCurrentIndex(foundPositions.length - 1);
+      return;
+    }
+    setCurrentIndex(currentIndex - 1);
     console.log("Previous");
   };
 
@@ -145,14 +158,7 @@ function TextFileUploader() {
   const handleReplaceAll = (searchText, replaceText, isRegex) => {
     // Implement replace all functionality here
   };
-  useEffect(() => {
-    if(searchTriggered){
-      setSearchTriggered(false)
-    }
-    if(isRegex){
-      setIsRegex(false);
-    }
-  }, [searchOpen]);
+
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4 lg:mt-0">
@@ -232,89 +238,7 @@ function TextFileUploader() {
       {/* Txt Editor */}
       {fileName && (
         <section className="w-full px-3 md:px-6 flex flex-col">
-            <div className="w-full flex flex-row items-center justify-between">
-                {/* Filename Display */}
-                <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
-                <DialogTrigger asChild className="flex items-center gap-2 text-white font-bold bg-gray-700 px-2 py-1 h-8 w-fit">
-                  <div>
-                    <div className="font-bold ">{fileName}</div>
-                    <FaRegEdit className="text-sm" />
-                    {isModified && <div className="w-3 h-3 bg-white rounded-full ml-2" />}
-                  </div>
-                </DialogTrigger>
-                <DialogContent className="mx-4 w-fit mx-auto max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Edit File Name</DialogTitle>
-                    <DialogDescription>
-                      Rename the file to something more meaningful.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="flex flex-col items-start gap-4">
-                      <Label htmlFor="name" className="text-right">
-                        Name
-                      </Label>
-                      <Input id="name" value={newFileName} className="col-span-3" onChange={handleFileNameChange}/>
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="button" onClick={handleSaveFileName}>Save changes</Button>
-                  </DialogFooter>
-                </DialogContent>
-                </Dialog>
-      
-                <div className="flex h-8">
-                    <button
-                    onClick={handleSave}
-                    type="button"
-                    disabled={!isModified} // Disable if no changes
-                    className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300 hidden md:flex"}
-                    >
-                        <FaRegSave/>
-                    </button>
-                    <button
-                    onClick={handleDownload}
-                    type="button"
-                    disabled={!fileContent} // Disable if no file content to download
-                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300 hidden md:flex"}
-                    >
-                        <FaFileDownload/>
-                    </button>
-                    <button
-                    onClick={handleToggleLineNumbers}
-                    type="button"
-                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300 hidden md:flex"}
-                    >
-                      <FaListOl/>
-                    </button>
-                    <Search
-                      onSearch={handleSearch}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                      onReplace={handleReplace}
-                      onReplaceAll={handleReplaceAll}
-                      open={searchOpen}
-                      setOpen={setSearchOpen}
-                      searchText={searchText}
-                      setSearchText={setSearchText}
-                      replaceText={replaceText}
-                      setReplaceText={setReplaceText}
-                      isRegex={isRegex}
-                      setIsRegex={setIsRegex}
-                    />
-                </div>
-            </div>
-            {/* Text Editor */}
-            <Textarea
-            fileContent={fileContent}
-            onContentChange={handleContentChange}
-            lineNumbersVisible={lineNumbersVisible}
-            style={{ fontFamily: "monospace" }}
-            searchText={searchText}
-            isRegex={isRegex}
-            searchOpen={searchOpen}
-            searchTriggered={searchTriggered}
-          />
+          <Transcript fileContent={fileContent} fileName={fileName}/>
         </section>
     )}      
     </div>
