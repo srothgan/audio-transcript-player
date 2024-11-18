@@ -419,7 +419,7 @@ export default function Transcript({fileContent, fileName}){
                 )}
                 <div className="relative w-full flex-grow">
                 {showSearchUI && (
-                    <div className="absolute top-0 right-0 bg-gray-800 p-2 rounded-b-lg rounded-l-lg shadow-lg w-fit z-50 border border-gray-700">
+                    <div className="absolute top-0 right-0 bg-gray-800 p-2 rounded-b-lg rounded-l-lg shadow-lg w-full sm:w-fit z-50 border border-gray-700">
                         {/* Search Row */}
                         <div className="flex items-center space-x-2 mb-2">
                             {/* Toggle Replace Button */}

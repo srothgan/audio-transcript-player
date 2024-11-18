@@ -6,7 +6,7 @@ export default function AboutPage() {
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-gray-800">About Transcript Editor</h1>
         <p className="text-lg text-gray-600 mt-2">
-          Welcome to the Transcript Editor – a tool designed to seamlessly integrate audio playback with transcript editing.
+          Welcome to the Transcript Editor &ndash; a tool designed to seamlessly integrate audio playback with transcript editing.
         </p>
       </header>
 
@@ -18,7 +18,7 @@ export default function AboutPage() {
           By allowing you to work with the audio file and transcript side by side, it aims to make transcription smoother and more efficient.
         </p>
         <p className="mt-2">
-          I created this web application because I couldn't find a similar tool. Switching between a text editor and an audio player while 
+          I created this web application because I couldn&apos;t find a similar tool. Switching between a text editor and an audio player while 
           transcribing or proof-reading AI-generated transcripts was unnecessarily complicated. This tool solves that problem.
         </p>
       </section>
@@ -26,10 +26,10 @@ export default function AboutPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Who am I?</h2>
         <p className="text-gray-600">
-          My name is Simon Rothgang, and I’m a student from Münster, Germany. When transcribing interviews, I often use 
+          My name is Simon Rothgang, and I&apos;m a student from M&uuml;nster, Germany. When transcribing interviews, I often use 
           <Link className="text-blue-500" href="https://github.com/JuergenFleiss/aTrain"> A-Train</Link>, but I still needed to proofread and check the 
           AI-generated transcripts. I found it challenging to use separate tools for audio and text editing because no tool allowed me to work 
-          with both side by side. That’s why I built this tool, and I hope it helps others as much as it has helped me.
+          with both side by side. That&apos;s why I built this tool, and I hope it helps others as much as it has helped me.
         </p>
       </section>
 
@@ -38,7 +38,7 @@ export default function AboutPage() {
         <div className="w-full lg:w-1/2">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">Audio Player</h2>
           <p className="text-gray-600 mb-4">
-            The audio player lets you listen to your files while editing transcripts. It's responsive, lightweight, and supports 
+            The audio player lets you listen to your files while editing transcripts. It&apos;s responsive, lightweight, and supports 
             multiple formats for seamless playback.
           </p>
           <ul className="list-disc list-inside text-gray-600 space-y-2">
@@ -72,7 +72,7 @@ export default function AboutPage() {
       <section className="mb-12">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Disclaimer</h2>
         <p className="text-gray-600">
-          The information on this website is provided "as is" without warranty of any kind. The author is not responsible for any inaccuracies or omissions.
+          The information on this website is provided &quot;as is&quot; without warranty of any kind. The author is not responsible for any inaccuracies or omissions.
         </p>
       </section>
     </div>
