@@ -342,14 +342,14 @@ export default function Transcript({fileContent, fileName}){
             <div className="w-full flex flex-row items-center justify-between">
                 {/* Filename Display */}
                 <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
-                <DialogTrigger asChild className="flex items-center gap-2 text-white font-bold bg-gray-700 px-2 py-1 h-8 w-fit">
+                <DialogTrigger asChild className="flex items-center gap-2 text-white font-bold bg-gray-700 px-2 py-1 h-8 w-1/2 md:w-full">
                   <div>
-                    <div className="font-bold ">{currentFileName}</div>
+                    <div className="font-bold w-3/4 md:w-fit overflow-hidden">{currentFileName}</div>
                     <FaRegEdit className="text-sm" />
                     {isModified && <div className="w-3 h-3 bg-white rounded-full ml-2" />}
                   </div>
                 </DialogTrigger>
-                <DialogContent className="mx-4 w-fit mx-auto max-w-[425px]">
+                <DialogContent className="mx-4 w-full mx-auto md:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Edit File Name</DialogTitle>
                     <DialogDescription>
@@ -375,7 +375,7 @@ export default function Transcript({fileContent, fileName}){
                     onClick={handleSave}
                     type="button"
                     disabled={!isModified} // Disable if no changes
-                    className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300 hidden md:flex"}
+                    className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300 flex"}
                     >
                         <FaRegSave/>
                     </button>
@@ -383,21 +383,21 @@ export default function Transcript({fileContent, fileName}){
                     onClick={handleDownload}
                     type="button"
                     disabled={!fileContent} // Disable if no file content to download
-                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300 hidden md:flex"}
+                    className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300 flex"}
                     >
                         <FaFileDownload/>
                     </button>
                     <button
                     onClick={handleToggleLineNumbers}
                     type="button"
-                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300 hidden md:flex"}
+                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300 flex"}
                     >
                       <FaListOl/>
                     </button>
                     <button
                     onClick={openSearch}
                     type="button"
-                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300 hidden md:flex"}
+                    className={"p-2 flex items-center text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300 flex"}
                     >
                       <FaSearch/>
                     </button>
@@ -419,7 +419,7 @@ export default function Transcript({fileContent, fileName}){
                 )}
                 <div className="relative w-full flex-grow">
                 {showSearchUI && (
-                    <div className="absolute top-0 right-0 bg-gray-800 p-2 rounded-b-lg rounded-l-lg shadow-lg w-fit z-50 border border-gray-700">
+                    <div className="absolute top-0 right-0 bg-gray-800 p-2 rounded-b-lg rounded-l-lg shadow-lg w-full sm:w-fit z-50 border border-gray-700">
                         {/* Search Row */}
                         <div className="flex items-center space-x-2 mb-2">
                             {/* Toggle Replace Button */}
