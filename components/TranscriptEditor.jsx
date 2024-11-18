@@ -18,11 +18,11 @@ function TranscriptEditor() {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file && file.type === "text/plain") {
-      setFileName(file.name);
-      setNewFileName(file.name);
       const reader = new FileReader();
       reader.onload = () => {
         const content = reader.result.replace(/\r\n|\r/g, "\n"); // Normalize line endings to \n
+        setFileName(file.name);
+        setNewFileName(file.name);
         setFileContent(content);
       };
       reader.readAsText(file);
@@ -35,14 +35,12 @@ function TranscriptEditor() {
   };
 
   const handleDeleteTxt = () =>{
-    setFileName(null)
-    setFileContent("")
-    setOriginalContent("")
-    setIsModified(false)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
     }
-  }
+    setFileName(null)
+    setFileContent("")
+  };
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4 lg:mt-0">
@@ -73,23 +71,20 @@ function TranscriptEditor() {
             </button>
             )}
         </div>
-       </div>
+      </div>
        
-       {fileName && (
-        <div>
+      {fileName && fileContent && (
+        <div className="w-full px-3 md:px-6 flex flex-col">
           {isTouchScreen && (
-          <div className="w-full px-3 flex items-start justify-start xl:hidden text-xs text-gray-500 mb-2">
+          <div className="w-full flex items-start justify-start xl:hidden text-xs text-gray-500 mb-2">
             <span>The sync scroll of line numbers and textarea doesnt work well on touch screens.</span>
           </div>
           )}
-      </div>
-       )}
-      {/* Txt Editor */}
-      {fileName && (
-        <section className="w-full px-3 md:px-6 flex flex-col">
-          <Transcript fileContent={fileContent} fileName={fileName}/>
-        </section>
-    )}      
+          <section className="w-full flex flex-col">
+            <Transcript fileContent={fileContent} fileName={fileName}/>
+          </section>
+        </div>
+      )}      
     </div>
   );
 }

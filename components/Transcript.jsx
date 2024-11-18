@@ -229,8 +229,7 @@ export default function Transcript({fileContent, fileName}){
         // Sync scrolling with line numbers and highlights
         handleScroll();
     };
-    
-    
+      
     const onNext = () => {
         if (searchResults.length === 0) return;
         const nextIndex = currentIndex < searchResults.length - 1 ? currentIndex + 1 : 0;
@@ -294,9 +293,13 @@ export default function Transcript({fileContent, fileName}){
     };
 
     useEffect(() => {
-        setContent(fileContent);
-        setOriginalContent(fileContent);
-    }, [fileContent]);
+        if (fileContent !== null) {
+          setContent(fileContent);
+          setOriginalContent(fileContent);
+          setCurrentFileName(fileName);
+          setNewFileName(fileName);
+        }
+    }, [fileContent, fileName]);
 
     useEffect(() => {
         calculateLineNumbers();
@@ -304,12 +307,6 @@ export default function Transcript({fileContent, fileName}){
           lineNumberRef.current.scrollTop = textAreaRef.current.scrollTop;
         }
     }, [content, lineNumbersVisible]);
-
-    useEffect(() => {
-        setContent(fileContent);
-        setCurrentFileName(fileName);   
-        setNewFileName(fileName); 
-    }, []);
 
     useEffect(() => {
         if (!searchText) {
