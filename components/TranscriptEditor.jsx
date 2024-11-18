@@ -1,42 +1,16 @@
 "use client"
 import { useState, useRef, useEffect} from "react";
-import { FaRegSave, FaFileDownload, FaTrashAlt, FaListOl, FaRegEdit } from "react-icons/fa";
+import {  FaTrashAlt } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
-import Textarea from "./Textarea";
 import { hasTouchScreen } from "@/utils/hasTouch";
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Search from "./Search";
 import Transcript from "./Transcript";
 
-function TextFileUploader() {
+function TranscriptEditor() {
   const [fileName, setFileName] = useState(null); // To store the file name
   const [newFileName, setNewFileName] = useState(null); // To store the new file name
   const [fileContent, setFileContent] = useState(""); // To display and edit text
-  const [originalContent, setOriginalContent] = useState(""); // To track original text
-  const [isModified, setIsModified] = useState(false); // To indicate unsaved changes
   const fileInputRef = useRef(null); 
-  const [lineNumbersVisible, setLineNumbersVisible] = useState(true);
-  const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const isTouchScreen = hasTouchScreen();
-
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [searchText, setSearchText] = useState("")
-  const [replaceText, setReplaceText] = useState("")
-  const [isRegex, setIsRegex] = useState(false)
-  const [searchTriggered, setSearchTriggered] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [foundPositions, setFoundPositions] = useState([]);
 
   const { toast } = useToast();
 
@@ -50,8 +24,6 @@ function TextFileUploader() {
       reader.onload = () => {
         const content = reader.result.replace(/\r\n|\r/g, "\n"); // Normalize line endings to \n
         setFileContent(content);
-        setOriginalContent(content);
-        setIsModified(false);
       };
       reader.readAsText(file);
     } else {
@@ -60,63 +32,6 @@ function TextFileUploader() {
         description: "Please upload a valid .txt file.",
       })
     }
-  };
-
-  // Track content changes
-  const handleContentChange = (newContent) => {
-    setFileContent(newContent);
-    setIsModified(newContent !== originalContent);
-  };
-
-  const handleToggleLineNumbers = () => {
-    setLineNumbersVisible(!lineNumbersVisible);
-  };
-
-  // Save content and reset unsaved changes indicator
-  const handleSave = () => {
-    setOriginalContent(fileContent); // Set current content as the saved state
-    setIsModified(false); // Mark as saved
-    toast({
-      variant: "success",
-      description: "Changes saved!",
-    })
-  };
-  const handleFileNameChange = (event) => {
-    setNewFileName(event.target.value)
-  }
-  const handleSaveFileName = () => {
-    if(!newFileName.endsWith(".txt")){
-      toast({
-        variant: "destructive",
-        description: "File name must end with .txt",
-      });
-      setNewFileName(fileName)
-      return;
-    }
-    setFileName(newFileName);
-    setDialogIsOpen(false)
-    toast({
-      variant: "success",
-      description: "File name updated!",
-    });
-  };
-
-
-  // Download the edited content as a .txt file
-  const handleDownload = () => {
-    if(isModified){
-      toast({
-        variant: "warn",
-        description: "Unsaved changes. Save before downloading.",
-      })
-      return;
-    }
-    const blob = new Blob([fileContent], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName || "download.txt"; // Use original or default name
-    link.click();
-    URL.revokeObjectURL(link.href); // Clean up URL after download
   };
 
   const handleDeleteTxt = () =>{
@@ -128,37 +43,6 @@ function TextFileUploader() {
       fileInputRef.current.value = ""; // Clear the file input to remove the file name
     }
   }
-  const handleSearch = (searchText, isRegex) => {
-    console.log("Searching for", searchText, "with regex", isRegex);
-    setSearchTriggered(true);
-  };
-
-  const handleNext = () => {
-    if(currentIndex === foundPositions.length - 1){
-      setCurrentIndex(0);
-      return;
-    }
-    setCurrentIndex(currentIndex + 1);
-    console.log("Next");
-  };
-
-  const handlePrevious = () => {
-    if(currentIndex === 0){
-      setCurrentIndex(foundPositions.length - 1);
-      return;
-    }
-    setCurrentIndex(currentIndex - 1);
-    console.log("Previous");
-  };
-
-  const handleReplace = (replaceText) => {
-    // Implement replace functionality here
-  };
-
-  const handleReplaceAll = (searchText, replaceText, isRegex) => {
-    // Implement replace all functionality here
-  };
-
 
   return (
     <div className="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4 lg:mt-0">
@@ -193,46 +77,11 @@ function TextFileUploader() {
        
        {fileName && (
         <div>
-        <div>
           {isTouchScreen && (
           <div className="w-full px-3 flex items-start justify-start xl:hidden text-xs text-gray-500 mb-2">
             <span>The sync scroll of line numbers and textarea doesnt work well on touch screens.</span>
           </div>
           )}
-        </div>
-       <div className="w-full px-3 flex items-start justify-start md:hidden h-8 mb-2 space-x-2">
-          <button
-                type="button"
-                onClick={handleDeleteTxt}
-                className="px-2 h-8 py-1 bg-slate-200 text-red-600 rounded-md transition flex justify-center items-center"
-                aria-label="Delete Txt"
-            >   
-                <FaTrashAlt size={18} />
-            </button>
-          <button
-          onClick={handleSave}
-          type="button"
-          disabled={!isModified} // Disable if no changes
-          className={"p-2 text-white bg-gray-700 hover:bg-gray-400 border-r border-gray-300"}
-          >
-              <FaRegSave/>
-          </button>
-          <button
-          onClick={handleDownload}
-          type="button"
-          disabled={!fileContent} // Disable if no file content to download
-          className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-x border-gray-300"}
-          >
-              <FaFileDownload/>
-          </button>
-          <button
-          onClick={handleToggleLineNumbers}
-          type="button"
-          className={"p-2 text-white font-bold bg-gray-700 hover:bg-gray-400 border-l border-gray-300"}
-          >
-            <FaListOl/>
-          </button>
-      </div>
       </div>
        )}
       {/* Txt Editor */}
@@ -245,4 +94,4 @@ function TextFileUploader() {
   );
 }
 
-export default TextFileUploader;
+export default TranscriptEditor;
