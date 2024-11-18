@@ -1,5 +1,5 @@
 import AudioPlayer from "@/components/AudioPlayer";
-import TextFileUploader from "@/components/TranscriptEditor";
+import TranscriptEditor from "@/components/TranscriptEditor";
 export default function Home() {
   return (
     <div className='w-full flex flex-col lg:flex-row gap-4 px-1 md:px-2 xl:px-2 my-4'>
@@ -7,7 +7,7 @@ export default function Home() {
         <AudioPlayer />
       </div>
       <div className='w-full flex-grow'>
-        <TextFileUploader/>
+        <TranscriptEditor/>
       </div>
     </div>
   );
