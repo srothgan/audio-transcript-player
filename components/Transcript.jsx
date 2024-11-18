@@ -40,11 +40,6 @@ export default function Transcript({fileContent, fileName}){
 
     const { toast } = useToast();
 
-    //TODO
-    //make undo work with replace
-    //check for performance improvements, duplicate code 
-    //\[\d{1,2}:\d{2}:\d{2}\] - 
-
     const calculateWrappedLines = (text, textareaWidth, font) => {
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
